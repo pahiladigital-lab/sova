@@ -1,6 +1,6 @@
 # Sova website
 
-A one-page site for **Sova**, a loofah-infused natural soap from Kathmandu.
+A one-page site for **Sova**, a loofah-infused soap from Kathmandu (Rose ma Dose and la..la..la.. Vanilla).
 It's plain HTML, CSS and JavaScript with no build step and no libraries.
 
 ```
@@ -69,7 +69,8 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 ## Placeholders still to fill in
 
 - [ ] Your logo file (the site currently uses a simple drawn leaf + "sova" wordmark)
-- [ ] Ingredient list and bar weight ("The bar" section currently says "Full ingredient list coming soon")
+- [ ] Bar weight (not shown yet)
+- [ ] Confirm the Vanilla ingredient name (currently "vanilla fragrance", search for CONFIRM in index.html)
 - [ ] Payment methods (How to order → step 2)
 - [ ] Delivery areas, charges and timing (How to order → step 3)
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
