@@ -128,6 +128,9 @@ p { margin: 0 0 1em; }
 }
 .site-header.is-scrolled { border-color: rgba(59, 42, 30, .08); box-shadow: 0 6px 20px -16px rgba(59,42,30,.5); }
 .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+.logo-img { width: 52px; height: 52px; border-radius: 50%; box-shadow: 0 4px 12px -6px rgba(59,42,30,.4); transition: transform .3s var(--ease); }
+.logo:hover .logo-img { transform: rotate(-8deg); }
+.logo-footer { width: 88px; height: 88px; }
 .logo { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--leaf-deep); }
 .logo-text {
   font-family: var(--font-display); font-variation-settings: "SOFT" 100;
@@ -298,7 +301,11 @@ p { margin: 0 0 1em; }
 
 /* Scent cards */
 .scents { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 12px; }
-@media (min-width: 560px) { .scents { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 560px) {
+  .scents { grid-template-columns: 1fr 1fr; }
+  .scent { flex-direction: column; }
+  .scents .scent-img { width: 100%; height: auto; aspect-ratio: 16 / 10; }
+}
 .scent {
   display: flex; gap: 12px; align-items: flex-start;
   background: var(--paper); border-radius: var(--radius-sm); padding: 16px;
@@ -308,10 +315,12 @@ p { margin: 0 0 1em; }
 .scent:hover { transform: translateY(-3px); }
 .scent-rose { --scent: #E8899A; --scent-soft: #F8DDE2; }
 .scent-vanilla { --scent: #D9B77A; --scent-soft: #F5EAD3; }
-.scent-dot {
-  flex: none; width: 34px; height: 34px; border-radius: 50%; margin-top: 2px;
-  background: radial-gradient(circle at 35% 35%, var(--scent-soft), var(--scent));
+.scent-img {
+  flex: none; width: 72px; height: 72px; object-fit: cover; border-radius: 18px;
+  border: 3px solid var(--scent-soft); box-shadow: var(--shadow-sm);
+  transition: transform .35s var(--ease);
 }
+.scent:hover .scent-img { transform: rotate(-4deg) scale(1.05); }
 .scent h3 { font-size: 1.15rem; margin-bottom: .25em; }
 .scent p { font-size: .95rem; line-height: 1.5; color: var(--bark-soft); margin: 0 0 .4em; }
 .scent details { font-size: .9rem; }
@@ -556,6 +565,7 @@ p { margin: 0 0 1em; }
 .site-footer a { color: #F7F2E7; }
 .footer-grid { display: grid; gap: 28px; }
 .logo-light { color: var(--sage); }
+.footer-tag strong { color: #F7F2E7; font-family: var(--font-display); font-size: 1.1rem; }
 .footer-tag { margin-top: 10px; color: #CFC4B2; max-width: 34ch; }
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-weight: 700; }
 .footer-links li { display: flex; align-items: center; gap: 10px; }

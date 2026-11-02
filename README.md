@@ -34,13 +34,14 @@ automatically. No code changes needed.
 | `assets/story.jpg` | "Our story" (founding team) | Portrait 4:5, ~880×1100 |
 | `assets/ig-1.jpg` … `assets/ig-6.jpg` | Instagram grid | Square, ~600×600 |
 | `assets/og-image.jpg` | Preview when the link is shared (WhatsApp, Facebook…) | 1200×630 |
-| `assets/favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Browser tab / phone home screen icon | Square (32×32 and 180×180 for the PNGs) |
+| `assets/scent-rose.jpg`, `assets/scent-vanilla.jpg` | Small photos on the Rose ma Dose / Vanilla cards | Square, 240×240 |
+| `assets/logo.png` | Logo in the header and footer | Square PNG with transparent corners, 240×240 |
+| `assets/favicon-32.png`, `favicon-64.png`, `apple-touch-icon.png` | Browser tab / phone home screen icon | 32×32, 64×64, 180×180 |
 
 Tips:
 - Keep photos as **JPG** and under ~200 KB each (use https://squoosh.app to shrink them).
 - If you also change the **alt text** (the description in `alt="…"` in `index.html`), describe what's really in your photo.
-- **Logo:** the logo is drawn in code (leaf + "sova"). To use your own logo file, put it in
-  `assets/logo.png` and follow the comment next to `class="logo"` in `index.html`.
+- **Logo:** your Sova logo is `assets/logo.png`. Replace that file to update it everywhere.
 
 ## Change text
 
@@ -68,11 +69,9 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 
 ## Placeholders still to fill in
 
-- [ ] Your logo file (the site currently uses a simple drawn leaf + "sova" wordmark)
 - [ ] Bar weight (not shown yet)
 - [ ] Confirm the Vanilla ingredient name (currently "vanilla fragrance", search for CONFIRM in index.html)
 - [ ] Payment methods (How to order → step 2)
 - [ ] Delivery areas, charges and timing (How to order → step 3)
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
 - [ ] Email and phone (commented out in the footer)
-- [ ] Favicon (browser tab icon) is a simple leaf. Replace it with your logo if you like
