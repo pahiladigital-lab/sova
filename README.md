@@ -21,16 +21,17 @@ python3 -m http.server 8000
 
 Then visit http://localhost:8000
 
-## Replace the placeholder images
+## Change the photos
 
-Every placeholder image says **"PLACEHOLDER · replace …"** on it. Save your photo with the
-**exact same file name** in `assets/` and it will appear automatically. No code changes needed.
+The site uses your real photos (cropped, compressed and with phone location data removed).
+To swap one, save the new photo with the **exact same file name** in `assets/` and it appears
+automatically. No code changes needed.
 
 | File | Where it shows | Best shape / size |
 |---|---|---|
-| `assets/hero-soap.jpg` | Big image at the top | Square, ~1200×1200 |
-| `assets/product-soap.jpg` | "The bar" card (tap to peek) | Portrait 4:5, ~1000×1250 |
-| `assets/story.jpg` | "Our story" | Portrait 4:5, ~1000×1250 |
+| `assets/hero-soap.jpg` | Big image at the top | Square, ~1000×1000 |
+| `assets/product-soap.jpg` | "The bar" card (tap to peek) | Portrait 4:5, ~880×1100 |
+| `assets/story.jpg` | "Our story" (founding team) | Portrait 4:5, ~880×1100 |
 | `assets/ig-1.jpg` … `assets/ig-6.jpg` | Instagram grid | Square, ~600×600 |
 | `assets/og-image.jpg` | Preview when the link is shared (WhatsApp, Facebook…) | 1200×630 |
 | `assets/favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Browser tab / phone home screen icon | Square (32×32 and 180×180 for the PNGs) |
@@ -67,10 +68,10 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 
 ## Placeholders still to fill in
 
-- [ ] All images in `assets/` (see table above), plus your logo if you have one
+- [ ] Your logo file (the site currently uses a simple drawn leaf + "sova" wordmark)
 - [ ] Ingredient list and bar weight ("The bar" section currently says "Full ingredient list coming soon")
 - [ ] Payment methods (How to order → step 2)
 - [ ] Delivery areas, charges and timing (How to order → step 3)
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
 - [ ] Email and phone (commented out in the footer)
-- [ ] Real Instagram photos for the grid (it links to your profile and doesn't load your posts automatically)
+- [ ] Favicon (browser tab icon) is a simple leaf. Replace it with your logo if you like
