@@ -75,3 +75,19 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 - [ ] Delivery areas, charges and timing (How to order → step 3)
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
 - [ ] Email and phone (commented out in the footer)
+
+## Security
+
+The site is static (no forms, logins, database or third-party scripts), so there is very little to attack.
+Built-in protections:
+- **Content Security Policy** (`<meta http-equiv="Content-Security-Policy">` in `index.html`): only this site's
+  own files and Google Fonts can load, so injected scripts are blocked. If you edit the one-line inline
+  `<script>` in `<head>`, its `sha256-…` hash in the policy must be updated too, or it will be blocked.
+- External links open with `rel="noopener noreferrer"`.
+- Photos have their hidden metadata (including phone GPS location) removed.
+- An "official channel" note tells customers that orders only go through @sova.np9.
+
+The bigger risks are your **accounts**, not the code:
+- Turn on two-factor authentication for the GitHub account and for the @sova.np9 Instagram.
+- In the repo, go to **Settings → Pages** and tick **Enforce HTTPS**.
+- Only give write access to the repo to people who need it.

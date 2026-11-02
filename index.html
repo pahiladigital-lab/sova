@@ -7,6 +7,9 @@
   <meta name="description" content="Sova is a loofah-infused soap with no harmful chemicals, so you cleanse and gently exfoliate in one step. Choose Rose ma Dose or Vanilla, NPR 150 each. From a small startup in Kathmandu, Nepal. Order on Instagram.">
   <meta name="theme-color" content="#F7F2E7">
   <meta name="color-scheme" content="light">
+  <!-- Security: only allow this site's own files + Google Fonts to load (blocks injected scripts). -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- PLACEHOLDER: once you have a domain, set it here and in og:url / og:image (use full https:// URLs) -->
   <!-- <link rel="canonical" href="https://YOUR-DOMAIN/"> -->
@@ -169,7 +172,7 @@
                 <p>Sweet, warm and cosy.</p>
                 <details>
                   <summary>Ingredients</summary>
-                  <!-- CONFIRM: owner said Vanilla only differs from Rose ma Dose in fragrance. Update if the exact vanilla ingredient name is different. -->
+                  <!-- CONFIRM: exact vanilla ingredient name -->
                   <p>Loofah, soap base, glycerine, vanilla fragrance, food colour.</p>
                 </details>
               </div>
@@ -322,7 +325,7 @@
         </div>
         <ul class="soon-grid">
           <li class="reveal">
-            <button class="flip" type="button" aria-pressed="false" style="--tone: var(--turmeric); --tone-soft: var(--turmeric-soft)">
+            <button class="flip flip-turmeric" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
                   <span class="flip-bar" aria-hidden="true"></span>
@@ -338,7 +341,7 @@
             </button>
           </li>
           <li class="reveal">
-            <button class="flip" type="button" aria-pressed="false" style="--tone: #6E8B3D; --tone-soft: #E4EBCF">
+            <button class="flip flip-neem" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
                   <span class="flip-bar" aria-hidden="true"></span>
@@ -354,7 +357,7 @@
             </button>
           </li>
           <li class="reveal">
-            <button class="flip" type="button" aria-pressed="false" style="--tone: var(--leaf); --tone-soft: var(--sage-soft)">
+            <button class="flip flip-aloe" type="button" aria-pressed="false">
               <span class="flip-inner">
                 <span class="flip-face flip-front">
                   <span class="flip-bar" aria-hidden="true"></span>
@@ -441,12 +444,16 @@
           </div>
 
           <div class="order-cta">
-            <p class="price"><span class="price-big">NPR 150</span> <span class="price-unit">per bar</span></p>
+            <p class="price"><span class="price-big">NPR 150</span> <span class="price-unit">each</span></p>
             <a class="btn btn-leaf btn-big" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
               <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
               Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
             </a>
           </div>
+          <p class="official-note">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>We only take orders through our official Instagram, <strong>@sova.np9</strong>. If another account or website asks you to pay for Sova, it isn't us.</span>
+          </p>
         </div>
       </div>
     </section>
@@ -491,7 +498,7 @@
   </a>
 
   <!-- Icon sprite -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <svg class="sprite" width="0" height="0" aria-hidden="true">
     <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
   </svg>
 </body>

@@ -491,6 +491,11 @@ p { margin: 0 0 1em; }
 }
 .flip-hint { font-size: .85rem; color: var(--bark-soft); font-weight: 700; }
 
+.flip-turmeric { --tone: var(--turmeric); --tone-soft: var(--turmeric-soft); }
+.flip-neem { --tone: #6E8B3D; --tone-soft: #E4EBCF; }
+.flip-aloe { --tone: var(--leaf); --tone-soft: var(--sage-soft); }
+.sprite { position: absolute; }
+
 /* ---------- Instagram ---------- */
 .ig-grid { list-style: none; margin: 0 auto 32px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 760px; }
 @media (min-width: 720px) { .ig-grid { gap: 14px; } }
@@ -553,6 +558,13 @@ p { margin: 0 0 1em; }
 
 .order-cta { margin-top: 36px; padding-top: 28px; border-top: 2px dashed var(--oat); display: grid; justify-items: center; gap: 4px; }
 .order-cta .price { margin: 0 0 10px; }
+
+.official-note {
+  display: flex; gap: 10px; align-items: flex-start; max-width: 520px; margin: 24px auto 0;
+  background: var(--sage-soft); color: var(--leaf-deep); border-radius: var(--radius-sm);
+  padding: 12px 14px; font-size: .9rem; line-height: 1.5;
+}
+.official-note svg { flex: none; margin-top: 2px; }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--bark-deep); color: #E9E1D2; padding: 56px 0 56px; }
