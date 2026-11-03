@@ -75,7 +75,7 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 - [ ] Payment methods (How to order → step 2)
 - [ ] Delivery areas, charges and timing (How to order → step 3)
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
-- [ ] Email and phone (commented out in the footer)
+- [ ] Phone number (commented out in the footer)
 
 ## Security
 
