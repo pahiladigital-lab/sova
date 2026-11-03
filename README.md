@@ -30,7 +30,8 @@ automatically. No code changes needed.
 | File | Where it shows | Best shape / size |
 |---|---|---|
 | `assets/hero-soap.jpg` | Big image at the top | Square, ~1000×1000 |
-| `assets/product-soap.jpg` | "The bar" card (tap to peek) | Portrait 4:5, ~880×1100 |
+| `assets/product-soap.jpg` | "The bar" card, main photo (tray) | Portrait 4:5, ~880×1100 |
+| `assets/product-peek.jpg` | "The bar" card, photo shown on hover / tap (loofah close-up) | Portrait 4:5, ~880×1100 |
 | `assets/story.jpg` | "Our story" (founding team) | Portrait 4:5, ~880×1100 |
 | `assets/ig-1.jpg` … `assets/ig-6.jpg` | Instagram grid | Square, ~600×600 |
 | `assets/og-image.jpg` | Preview when the link is shared (WhatsApp, Facebook…) | 1200×630 |
