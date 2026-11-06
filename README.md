@@ -77,6 +77,15 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
 - [ ] Phone number (commented out in the footer)
 
+## Shop section
+
+Customers pick Rose ma Dose / Vanilla quantities, see the total, and tap **Send order on Instagram**.
+The order message is copied and a DM with @sova.np9 opens for them to paste and send (Instagram doesn't
+allow websites to pre-fill a DM). "Or send it by email" opens an email to sovasoap.np9@gmail.com with the
+order already written. Nothing is stored and no payment is taken on the site; you confirm payment and
+delivery in the chat. Prices come from `data-price` on each `.shop-item` in `index.html`; change them
+there if prices change.
+
 ## Security
 
 The site is static (no forms, logins, database or third-party scripts), so there is very little to attack.

@@ -396,6 +396,77 @@ p { margin: 0 0 1em; }
 @keyframes wave { 0%, 100% { transform: translateX(-8px); } 50% { transform: translateX(8px); } }
 @keyframes twinkle { 0%, 100% { transform: scale(.7) rotate(0); } 50% { transform: scale(1.15) rotate(20deg); } }
 
+/* ---------- Shop ---------- */
+.shop { background: var(--oat); }
+.shop-grid { display: grid; gap: 20px; align-items: start; max-width: 980px; margin: 0 auto; }
+@media (min-width: 900px) { .shop-grid { grid-template-columns: 1.1fr .9fr; gap: 28px; } }
+.shop-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.shop-item {
+  display: grid; grid-template-columns: 84px 1fr auto; gap: 14px; align-items: center;
+  background: var(--paper); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-sm);
+}
+.shop-item img { width: 84px; height: 84px; object-fit: cover; border-radius: 16px; }
+.shop-item h3 { font-size: 1.08rem; margin: 0 0 .15em; }
+.shop-item-info p { margin: 0; font-weight: 800; color: var(--leaf-deep); font-size: .95rem; }
+.shop-item-info p span { font-weight: 600; color: var(--bark-soft); }
+.qty { display: flex; align-items: center; gap: 4px; background: var(--cream); border-radius: 999px; padding: 4px; }
+.qty-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--paper); color: var(--leaf-deep); font-size: 1.3rem; font-weight: 800; line-height: 1;
+  box-shadow: 0 2px 6px -3px rgba(59,42,30,.4); transition: background-color .2s, transform .15s;
+}
+.qty-btn:hover { background: var(--sage-soft); }
+.qty-btn:active { transform: scale(.92); }
+.qty-btn:disabled { opacity: .35; cursor: not-allowed; }
+.qty-val { min-width: 26px; text-align: center; font-weight: 800; font-size: 1.05rem; }
+@media (max-width: 560px) {
+  .shop-item { grid-template-columns: 64px 1fr auto; gap: 10px; padding: 10px; }
+  .shop-item img { width: 64px; height: 64px; border-radius: 12px; }
+  .shop-item h3 { font-size: 1rem; }
+  .qty-btn { width: 36px; height: 36px; }
+}
+@media (max-width: 380px) {
+  .shop-item { grid-template-columns: 64px 1fr; }
+  .shop-item img { width: 64px; height: 64px; }
+  .qty { grid-column: 1 / -1; justify-content: space-between; }
+}
+
+.basket { background: var(--paper); border-radius: 26px; padding: 22px 20px; box-shadow: var(--shadow); }
+@media (min-width: 900px) { .basket { position: sticky; top: 88px; } }
+.basket h3 { font-size: 1.3rem; margin-bottom: .6em; }
+.basket-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.basket-lines li { display: flex; justify-content: space-between; gap: 10px; font-size: .95rem; }
+.basket-empty { color: var(--bark-soft); }
+.basket-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 2px dashed var(--oat); margin: 14px 0 4px; padding-top: 12px; font-weight: 700;
+}
+.basket-total strong { font-family: var(--font-display); font-size: 1.6rem; color: var(--leaf-deep); }
+.basket-note { font-size: .82rem; color: var(--bark-soft); margin-bottom: 14px; }
+.basket-fields { display: grid; gap: 10px; margin-bottom: 16px; }
+.basket-fields label { display: block; font-weight: 700; font-size: .88rem; }
+.basket-fields input { display: block; width: 100%; margin-top: 4px; }
+.basket-fields label span { font-weight: 600; color: var(--bark-soft); }
+.basket-fields input {
+  font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px;
+  border: 2px solid var(--oat); background: var(--cream); color: var(--bark-deep);
+}
+.basket-fields input:focus-visible { border-color: var(--leaf); outline: none; box-shadow: 0 0 0 4px var(--sage-soft); }
+.basket-send { width: 100%; }
+.basket-email { display: block; text-align: center; margin-top: 10px; font-weight: 700; font-size: .92rem; }
+.basket-email[aria-disabled="true"] { pointer-events: none; opacity: .4; }
+.basket-toast { min-height: 1.4em; margin: 10px 0 0; text-align: center; font-weight: 700; color: var(--leaf); font-size: .92rem; }
+.basket-preview { margin-top: 6px; font-size: .88rem; }
+.basket-preview summary { cursor: pointer; color: var(--bark-soft); font-weight: 700; }
+.basket-msg {
+  white-space: pre-wrap; font: inherit; font-size: .88rem; background: var(--cream);
+  border-radius: 12px; padding: 10px 12px; margin: 8px 0 0; user-select: all;
+}
+.basket-whatsapp {
+  margin: 14px 0 0; font-size: .85rem; color: var(--leaf-deep);
+  background: var(--sage-soft); border-radius: 12px; padding: 10px 12px;
+}
+
 /* ---------- Eco impact ---------- */
 .eco { background: var(--leaf-deep); color: var(--cream); overflow: hidden; }
 .eco::before, .eco::after {

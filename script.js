@@ -16,6 +16,7 @@
     initHowTo();
     initFlips();
     initStepper();
+    initShop();
     initStickyButton();
   });
 
@@ -187,12 +188,13 @@
     var btn = document.querySelector(".sticky-order");
     var hero = document.querySelector(".hero-ctas");
     var orderCta = document.querySelector(".order-cta");
+    var shop = document.querySelector(".basket");
     var footer = document.querySelector(".site-footer");
     if (!btn || !("IntersectionObserver" in window)) { if (btn) btn.classList.add("is-shown"); return; }
 
-    var state = { hero: true, order: false, footer: false };
+    var state = { hero: true, order: false, footer: false, shop: false };
     var update = function () {
-      btn.classList.toggle("is-shown", !state.hero && !state.order && !state.footer);
+      btn.classList.toggle("is-shown", !state.hero && !state.order && !state.footer && !state.shop);
     };
     var watch = function (el, key) {
       if (!el) return;
@@ -206,6 +208,108 @@
     watch(hero, "hero");
     watch(orderCta, "order");
     watch(footer, "footer");
+    watch(shop, "shop");
+  }
+
+  /* Shop: build an order message, copy it, open Instagram DM (or email) */
+  function initShop() {
+    var root = document.querySelector(".shop");
+    if (!root) return;
+    var IG_DM = "https://ig.me/m/sova.np9";
+    var EMAIL = "sovasoap.np9@gmail.com";
+    var MAX = 20;
+    var items = Array.prototype.slice.call(root.querySelectorAll(".shop-item"));
+    var lines = root.querySelector(".basket-lines");
+    var sum = root.querySelector(".basket-sum");
+    var send = root.querySelector(".basket-send");
+    var email = root.querySelector(".basket-email");
+    var toast = root.querySelector(".basket-toast");
+    var msgBox = root.querySelector(".basket-msg");
+    var nameIn = root.querySelector("#ord-name");
+    var areaIn = root.querySelector("#ord-area");
+    var qty = {};
+    items.forEach(function (it) { qty[it.dataset.id] = 0; });
+
+    function clean(v) { return (v || "").replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, 80); }
+
+    function message() {
+      var out = ["Namaste Sova! I'd like to order:"], total = 0;
+      items.forEach(function (it) {
+        var q = qty[it.dataset.id], p = Number(it.dataset.price);
+        if (q > 0) { out.push("- " + it.dataset.name + " x " + q + " = NPR " + (q * p)); total += q * p; }
+      });
+      out.push("Total: NPR " + total);
+      var n = clean(nameIn.value), a = clean(areaIn.value);
+      if (n) out.push("Name: " + n);
+      if (a) out.push("Delivery area: " + a);
+      return { text: out.join("\n"), total: total };
+    }
+
+    function render() {
+      var m = message();
+      lines.textContent = "";
+      var any = false;
+      items.forEach(function (it) {
+        var q = qty[it.dataset.id], p = Number(it.dataset.price);
+        it.querySelector(".qty-val").textContent = q;
+        it.querySelector('[data-step="-1"]').disabled = q === 0;
+        it.querySelector('[data-step="1"]').disabled = q >= MAX;
+        if (q > 0) {
+          any = true;
+          var li = document.createElement("li");
+          var l = document.createElement("span"); l.textContent = it.dataset.name + " \u00d7 " + q;
+          var r = document.createElement("span"); r.textContent = "NPR " + (q * p);
+          li.appendChild(l); li.appendChild(r); lines.appendChild(li);
+        }
+      });
+      if (!any) {
+        var e = document.createElement("li"); e.className = "basket-empty";
+        e.textContent = "Your basket is empty. Add a soap to start."; lines.appendChild(e);
+      }
+      sum.textContent = m.total;
+      send.disabled = !any;
+      email.setAttribute("aria-disabled", String(!any));
+      email.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent("Sova order") + "&body=" + encodeURIComponent(m.text);
+      msgBox.textContent = m.text;
+    }
+
+    items.forEach(function (it) {
+      it.querySelectorAll(".qty-btn").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var id = it.dataset.id;
+          qty[id] = Math.max(0, Math.min(MAX, qty[id] + Number(b.dataset.step)));
+          toast.textContent = "";
+          render();
+        });
+      });
+    });
+    [nameIn, areaIn].forEach(function (el) { el.addEventListener("input", render); });
+
+    function copy(text) {
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+      return new Promise(function (ok, fail) {
+        var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", "");
+        t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select();
+        try { document.execCommand("copy") ? ok() : fail(); } catch (err) { fail(err); }
+        document.body.removeChild(t);
+      });
+    }
+
+    send.addEventListener("click", function () {
+      var text = message().text;
+      // open the DM window right away (inside the click) so pop-up blockers allow it
+      var w = window.open(IG_DM, "_blank");
+      if (w) w.opener = null;
+      copy(text).then(function () {
+        toast.textContent = "Order copied! Paste it into our Instagram chat and tap send.";
+      }, function () {
+        toast.textContent = "Couldn't copy automatically. Open \u201cSee the message\u201d below and copy it.";
+        root.querySelector(".basket-preview").open = true;
+      });
+      if (!w) toast.textContent += " If Instagram didn't open, message @sova.np9.";
+    });
+
+    render();
   }
 
   function rand(min, max) { return Math.round(min + Math.random() * (max - min)); }
