@@ -95,7 +95,10 @@ The **Notify me** form on the home page (Coming soon cards) emails launch reques
 Settings:
 - `config.js` → `web3formsKey`: the Web3Forms access key (public by design; manage it at web3forms.com).
   Used by both the Shop page and Notify me.
-- `googleForm`: optional second destination (a Google Form → Google Sheet). Empty = off.
+- `config.js` → `sheetUrl`: the Google Apps Script web-app address. Every order lands as a row in the
+  **Orders** tab and every Notify me request in the **Notify me** tab of the private "Sova orders" Sheet
+  (owned by sovasoap.np9@gmail.com). A backup of that script is in `google-sheet/Code.gs`.
+  Keep the Sheet private: it holds customers' phone numbers and addresses.
 - Prices come from `data-price` on each `.sp-product` in `shop.html`.
 
 If no destination is set up, the page tells customers to DM @sova.np9 instead of pretending to send.
@@ -110,7 +113,7 @@ Built-in protections:
 - External links open with `rel="noopener noreferrer"`.
 - Photos have their hidden metadata (including phone GPS location) removed.
 - An "official channel" note tells customers that orders only go through @sova.np9 and this website.
-- The Shop page may only send data to Web3Forms and Google Forms (`connect-src` in its security policy).
+- The Shop page may only send data to Web3Forms (`connect-src` in its security policy) and our Google Sheet script.
 - Anti-spam on the Shop page (limits are at the top of `shop.js`): no sending within 5 seconds of opening
   the page, 2 minutes between orders, max 3 orders per hour per browser, a "same order again?" check,
   rejection of fake phone numbers (e.g. 0000000000), and a hidden spam trap that silently drops bots.

@@ -8,13 +8,8 @@
     // Web3Forms key lives in config.js (shared with the "Notify me" form).
     web3formsKey: (window.SOVA_CONFIG && window.SOVA_CONFIG.web3formsKey) || "",
 
-    // Google Form: the form's "formResponse" address and the entry IDs of each question.
-    googleForm: {
-      action: "",          // e.g. "https://docs.google.com/forms/d/e/XXXX/formResponse"
-      fields: {            // e.g. "entry.123456789"
-        ref: "", items: "", total: "", name: "", phone: "", address: "", instagram: "", notes: "", gift: "", giftNote: ""
-      }
-    },
+    // Google Sheet (Apps Script) address lives in config.js too.
+    sheetUrl: (window.SOVA_CONFIG && window.SOVA_CONFIG.sheetUrl) || "",
 
     maxPerItem: 20,
 
@@ -185,11 +180,18 @@
       }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.success) throw new Error("web3forms"); }); });
     }
 
-    function viaGoogleForm(o) {
-      var g = CONFIG.googleForm, body = new URLSearchParams();
-      Object.keys(g.fields).forEach(function (k) { if (g.fields[k]) body.append(g.fields[k], k === "total" ? "NPR " + o.total : (o[k] || "")); });
-      // Google doesn't let websites read its reply ("no-cors"), so a finished request counts as sent.
-      return fetch(g.action, { method: "POST", mode: "no-cors", body: body });
+    function viaSheet(o) {
+      // Apps Script can't answer cross-site reads reliably, so send "no-cors": the row is added,
+      // and the customer's confirmation comes from the email (Web3Forms) which we can check.
+      return fetch(CONFIG.sheetUrl, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          type: "order", ref: o.ref, items: o.items, total: "NPR " + o.total,
+          name: o.name, phone: o.phone, address: o.address, instagram: o.instagram,
+          notes: o.notes, gift: o.gift, giftNote: o.giftNote
+        })
+      });
     }
 
     form.addEventListener("submit", function (ev) {
@@ -234,7 +236,7 @@
 
       var jobs = [];
       if (CONFIG.web3formsKey) jobs.push(viaWeb3Forms(o));
-      if (CONFIG.googleForm.action) jobs.push(viaGoogleForm(o));
+      if (CONFIG.sheetUrl) jobs.push(viaSheet(o));
       if (!jobs.length && DEMO) jobs.push(new Promise(function (ok) { setTimeout(ok, 700); }));
       if (!jobs.length) {
         status.textContent = "Online ordering isn't switched on yet. Please DM us on Instagram @sova.np9 to order.";
