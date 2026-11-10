@@ -102,7 +102,13 @@ Built-in protections:
 - External links open with `rel="noopener noreferrer"`.
 - Photos have their hidden metadata (including phone GPS location) removed.
 - An "official channel" note tells customers that orders only go through @sova.np9 and this website.
-- The Shop page may only send data to Web3Forms and Google Forms (`connect-src` in its security policy). It has a hidden spam trap and checks every field before sending.
+- The Shop page may only send data to Web3Forms and Google Forms (`connect-src` in its security policy).
+- Anti-spam on the Shop page (limits are at the top of `shop.js`): no sending within 5 seconds of opening
+  the page, 2 minutes between orders, max 3 orders per hour per browser, a "same order again?" check,
+  rejection of fake phone numbers (e.g. 0000000000), and a hidden spam trap that silently drops bots.
+- Both pages refuse to be shown inside another website's frame (they hide and link to the real site).
+- Limits live in the visitor's browser, so a determined person can get around them. Always confirm an
+  order with the customer before delivering. If spam starts, enable spam protection in the Web3Forms dashboard.
 
 The bigger risks are your **accounts**, not the code:
 - Turn on two-factor authentication for the GitHub account and for the @sova.np9 Instagram.

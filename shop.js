@@ -16,7 +16,13 @@
       }
     },
 
-    maxPerItem: 20
+    maxPerItem: 20,
+
+    // Anti-spam limits (per phone/browser)
+    minSecondsOnPage: 5,      // bots fill forms instantly; people can't
+    cooldownMinutes: 2,       // wait between two orders
+    maxOrdersPerHour: 3,      // after this, ask them to DM instead
+    duplicateWindowMin: 30    // same order again within 30 min needs a second tap
   };
   /* ==================================================== */
 
@@ -42,6 +48,22 @@
     };
     var qty = {};
     var sending = false;
+    var loadedAt = Date.now();
+    var confirmDuplicate = false;
+    var LOG_KEY = "sova-order-log";
+
+    function readLog() {
+      try { var v = JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+    }
+    function writeLog(entry) {
+      try {
+        var hourAgo = Date.now() - 3600e3;
+        var log = readLog().filter(function (x) { return x && x.t > hourAgo; });
+        log.push(entry);
+        localStorage.setItem(LOG_KEY, JSON.stringify(log.slice(-10)));
+      } catch (e) { /* storage blocked: limits just don't persist */ }
+    }
+    function fingerprint(o) { return (o.items + "|" + o.phone.replace(/\D/g, "")).toLowerCase(); }
     items.forEach(function (it) { qty[it.dataset.id] = 0; });
 
     function clean(v, max) {
@@ -103,7 +125,9 @@
       var name = clean(f.name.value, 60), phone = clean(f.phone.value, 20), address = clean(f.address.value, 200);
       var digits = phone.replace(/\D/g, "");
       if (name.length < 2) { setErr("e-name", "Please enter your name.", f.name); ok = false; first = first || f.name; } else setErr("e-name", "", f.name);
-      if (!/^\+?[\d\s-]+$/.test(phone) || digits.length < 7 || digits.length > 15) { setErr("e-phone", "Please enter a valid phone number.", f.phone); ok = false; first = first || f.phone; } else setErr("e-phone", "", f.phone);
+      var local = digits.replace(/^977/, "");
+      var fake = /^(\d)\1+$/.test(local) || "01234567890123456789".indexOf(local) !== -1 || "98765432109876543210".indexOf(local) !== -1;
+      if (!/^\+?[\d\s-]+$/.test(phone) || digits.length < 7 || digits.length > 15 || fake) { setErr("e-phone", "Please enter a valid phone number.", f.phone); ok = false; first = first || f.phone; } else setErr("e-phone", "", f.phone);
       if (address.length < 5) { setErr("e-address", "Please enter your delivery address.", f.address); ok = false; first = first || f.address; } else setErr("e-address", "", f.address);
       if (first) first.focus();
       return ok;
@@ -129,7 +153,7 @@
           access_key: CONFIG.web3formsKey,
           subject: "New Sova order " + o.ref + " (NPR " + o.total + ")",
           from_name: "Sova website",
-          botcheck: o.bot,
+          botcheck: false,
           "Order ref": o.ref, "Items": o.items, "Total": "NPR " + o.total,
           "Name": o.name, "Phone": o.phone, "Delivery address": o.address,
           "Instagram": o.instagram || "-", "Note": o.notes || "-"
@@ -157,6 +181,32 @@
         instagram: clean(f.instagram.value, 40), notes: clean(f.notes.value, 200), bot: f.bot.checked
       };
 
+      // --- anti-spam checks ---
+      var now = Date.now();
+      if (now - loadedAt < CONFIG.minSecondsOnPage * 1000) {
+        status.textContent = "Please take a moment to check your order, then tap Place order again.";
+        return;
+      }
+      if (o.bot) { showDone(o); return; } // spam trap ticked: pretend it worked, send nothing
+      var log = readLog().filter(function (x) { return x && x.t > now - 3600e3; });
+      var last = log[log.length - 1];
+      if (last && now - last.t < CONFIG.cooldownMinutes * 60e3) {
+        status.textContent = "You've just placed an order. Please wait a couple of minutes before placing another, or DM us on Instagram @sova.np9.";
+        return;
+      }
+      if (log.length >= CONFIG.maxOrdersPerHour) {
+        status.textContent = "You've placed several orders in the last hour. For more, please DM us on Instagram @sova.np9.";
+        return;
+      }
+      var fp = fingerprint(o);
+      var dup = log.some(function (x) { return x.f === fp && now - x.t < CONFIG.duplicateWindowMin * 60e3; });
+      if (dup && !confirmDuplicate) {
+        confirmDuplicate = true;
+        status.textContent = "This looks the same as an order you already placed. Tap Place order again only if you want a second one.";
+        return;
+      }
+      confirmDuplicate = false;
+
       var jobs = [];
       if (CONFIG.web3formsKey) jobs.push(viaWeb3Forms(o));
       if (CONFIG.googleForm.action) jobs.push(viaGoogleForm(o));
@@ -177,6 +227,7 @@
           status.textContent = "Sorry, your order couldn't be sent. Please check your internet and try again, or DM us on Instagram @sova.np9.";
           return;
         }
+        writeLog({ t: Date.now(), f: fingerprint(o) });
         showDone(o);
       });
     });

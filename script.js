@@ -3,6 +3,21 @@
   "use strict";
 
   document.documentElement.classList.add("js");
+
+  // Security: don't let other websites show Sova inside a frame (clickjacking / fake shops)
+  if (window.top !== window.self) {
+    document.documentElement.classList.add("is-framed");
+    document.addEventListener("DOMContentLoaded", function () {
+      var note = document.createElement("p");
+      note.className = "framed-note";
+      note.textContent = "For your safety, Sova's website only works when opened directly. ";
+      var a = document.createElement("a");
+      a.href = window.location.href; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = "Open sova's website";
+      note.appendChild(a);
+      document.body.appendChild(note);
+    });
+  }
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   document.addEventListener("DOMContentLoaded", function () {
