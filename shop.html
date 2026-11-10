@@ -29,6 +29,7 @@
   <script>document.documentElement.classList.add("js")</script>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+  <script src="config.js" defer></script>
   <script src="shop.js" defer></script>
 </head>
 <body class="shop-page" id="top">
@@ -54,7 +55,7 @@
       <div class="container">
         <p class="eyebrow">Shop</p>
         <h1>Fill your basket.</h1>
-        <p class="lead">Every bar has real loofah built in. NPR 150 each. Pick your scents, add your details, and we'll confirm payment and delivery with you.</p>
+        <p class="lead">Every bar has real loofah built in. NPR 150 each, or 5 for NPR 500 with the Loofah Love Pack. Pick your soaps, add your details, and we'll confirm payment and delivery with you.</p>
       </div>
     </section>
 
@@ -97,6 +98,30 @@
                 </div>
               </div>
             </li>
+            <li class="sp-product sp-pack" data-id="pack" data-name="Loofah Love Pack" data-price="500" data-size="5">
+              <img src="assets/pack.jpg" width="800" height="600" decoding="async" alt="A tray of wrapped Sova loofah soaps with Rose ma Dose and Vanilla labels">
+              <div class="sp-product-body">
+                <span class="sp-tag sp-tag-pack">Best value · Save NPR 250</span>
+                <h2>Loofah Love Pack</h2>
+                <p>5 bars for NPR 500, in any mix of Rose ma Dose and Vanilla. Stock up, share with family, or gift a few.</p>
+                <div class="sp-mix" role="group" aria-label="Choose the mix in each pack">
+                  <span class="sp-mix-label">Mix in each pack</span>
+                  <div class="sp-mix-row">
+                    <button type="button" class="qty-btn mix-btn" data-mix="-1" aria-label="One less Rose, one more Vanilla">−</button>
+                    <output class="sp-mix-val" aria-live="polite">3 Rose + 2 Vanilla</output>
+                    <button type="button" class="qty-btn mix-btn" data-mix="1" aria-label="One more Rose, one less Vanilla">+</button>
+                  </div>
+                </div>
+                <div class="sp-product-row">
+                  <strong>NPR 500 <s>NPR 750</s></strong>
+                  <div class="qty" role="group" aria-label="Number of Loofah Love Packs">
+                    <button type="button" class="qty-btn" data-step="-1" aria-label="Remove one pack">−</button>
+                    <output class="qty-val" aria-live="polite">0</output>
+                    <button type="button" class="qty-btn" data-step="1" aria-label="Add one pack">+</button>
+                  </div>
+                </div>
+              </div>
+            </li>
           </ul>
         </fieldset>
 
@@ -122,6 +147,12 @@
             <label>Note <span class="sp-opt">(optional)</span>
               <input type="text" name="notes" id="f-notes" maxlength="200" placeholder="e.g. gift, best time to call">
             </label>
+            <div class="sp-gift sp-wide">
+              <label class="sp-check"><input type="checkbox" id="f-gift"> <span>This is a gift 🎁</span></label>
+              <label class="sp-gift-note" hidden>Gift note <span class="sp-opt">(optional)</span>
+                <textarea id="f-giftnote" maxlength="150" rows="2" placeholder="e.g. Happy Tihar, Didi! Love, Asha"></textarea>
+              </label>
+            </div>
             <!-- spam trap: real people never see or tick this -->
             <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" name="botcheck" id="f-botcheck" tabindex="-1" autocomplete="off"></label>
           </div>
@@ -138,6 +169,7 @@
         <button type="submit" form="order-form" class="btn btn-leaf btn-big sp-place" disabled>Place order</button>
         <p class="sp-status" role="status" aria-live="polite"></p>
         <p class="basket-whatsapp">Once we confirm your order, we'll share our WhatsApp number so you can reach us easily about delivery.</p>
+        <p class="sp-alt"><a href="index.html#faq">Questions? Read our FAQ</a></p>
         <p class="sp-alt">Prefer to chat? <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">DM @sova.np9<span class="sr-only"> on Instagram (opens in a new tab)</span></a></p>
       </aside>
     </div>

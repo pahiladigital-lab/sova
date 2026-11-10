@@ -36,6 +36,7 @@ automatically. No code changes needed.
 | `assets/ig-1.jpg` … `assets/ig-6.jpg` | Instagram grid | Square, ~600×600 |
 | `assets/og-image.jpg` | Preview when the link is shared (WhatsApp, Facebook…) | 1200×630 |
 | `assets/scent-rose.jpg`, `assets/scent-vanilla.jpg` | Small photos on the Rose ma Dose / Vanilla cards | Square, 240×240 |
+| `assets/pack.jpg` | Loofah Love Pack photo on the Shop page | 4:3, ~800×600 |
 | `assets/logo.png` | Logo in the header and footer | Square PNG with transparent corners, 240×240 |
 | `assets/favicon-32.png`, `favicon-64.png`, `apple-touch-icon.png` | Browser tab / phone home screen icon | 32×32, 64×64, 180×180 |
 
@@ -72,7 +73,7 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 
 - [ ] Bar weight (not shown yet)
 - [ ] Confirm the Vanilla ingredient name (currently "vanilla fragrance", search for CONFIRM in index.html)
-- [ ] Payment methods (How to order → step 2)
+- [ ] Payment methods (How to order → step 2, and the FAQ answer "How do payment and delivery work?")
 - [ ] Delivery areas, charges and timing (How to order → step 3)
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
 - [ ] Phone number (commented out in the footer)
@@ -85,8 +86,15 @@ The order is sent automatically to **sovasoap.np9@gmail.com** through Web3Forms 
 customer sees a thank-you screen with an order number (e.g. `SOVA-AWULREG`). No payment is taken on the
 site; you contact the customer to confirm payment and delivery.
 
-Settings are at the top of `shop.js`:
-- `web3formsKey`: the Web3Forms access key (public by design; manage it at web3forms.com).
+The **Loofah Love Pack** (5 bars, any Rose/Vanilla mix, `data-price="500"`) and a **gift option**
+(tick box + optional note) are on the Shop page; both appear in the order email.
+
+The **Notify me** form on the home page (Coming soon cards) emails launch requests the same way
+(`notify.js`), with the same anti-spam checks.
+
+Settings:
+- `config.js` → `web3formsKey`: the Web3Forms access key (public by design; manage it at web3forms.com).
+  Used by both the Shop page and Notify me.
 - `googleForm`: optional second destination (a Google Form → Google Sheet). Empty = off.
 - Prices come from `data-price` on each `.sp-product` in `shop.html`.
 

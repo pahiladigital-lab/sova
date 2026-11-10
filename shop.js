@@ -5,14 +5,14 @@
 
   /* ===================== SETTINGS ===================== */
   var CONFIG = {
-    // Web3Forms: paste the Access Key you get at web3forms.com (sent to sovasoap.np9@gmail.com).
-    web3formsKey: "f83d0dd9-c195-4c33-a450-ebd180110913",
+    // Web3Forms key lives in config.js (shared with the "Notify me" form).
+    web3formsKey: (window.SOVA_CONFIG && window.SOVA_CONFIG.web3formsKey) || "",
 
     // Google Form: the form's "formResponse" address and the entry IDs of each question.
     googleForm: {
       action: "",          // e.g. "https://docs.google.com/forms/d/e/XXXX/formResponse"
       fields: {            // e.g. "entry.123456789"
-        ref: "", items: "", total: "", name: "", phone: "", address: "", instagram: "", notes: ""
+        ref: "", items: "", total: "", name: "", phone: "", address: "", instagram: "", notes: "", gift: "", giftNote: ""
       }
     },
 
@@ -44,12 +44,17 @@
       address: document.getElementById("f-address"),
       instagram: document.getElementById("f-ig"),
       notes: document.getElementById("f-notes"),
+      gift: document.getElementById("f-gift"),
+      giftNote: document.getElementById("f-giftnote"),
       bot: document.getElementById("f-botcheck")
     };
     var qty = {};
     var sending = false;
     var loadedAt = Date.now();
     var confirmDuplicate = false;
+    var packRose = 3; // Loofah Love Pack mix: Rose bars per pack (the rest are Vanilla)
+    var packEl = document.querySelector('.sp-product[data-id="pack"]');
+    function mixText() { var size = packEl ? Number(packEl.dataset.size) : 5; return packRose + " Rose + " + (size - packRose) + " Vanilla"; }
     var LOG_KEY = "sova-order-log";
 
     function readLog() {
@@ -74,7 +79,8 @@
       var list = [], total = 0;
       items.forEach(function (it) {
         var q = qty[it.dataset.id], p = Number(it.dataset.price);
-        if (q > 0) { list.push({ name: it.dataset.name, q: q, line: q * p }); total += q * p; }
+        var nm = it.dataset.id === "pack" ? it.dataset.name + " (" + mixText() + ")" : it.dataset.name;
+        if (q > 0) { list.push({ name: nm, q: q, line: q * p }); total += q * p; }
       });
       return { list: list, total: total, text: list.map(function (l) { return l.name + " x " + l.q + " = NPR " + l.line; }).join("\n") };
     }
@@ -100,11 +106,17 @@
         it.querySelector('[data-step="1"]').disabled = q >= CONFIG.maxPerItem;
         it.classList.toggle("is-picked", q > 0);
       });
+      if (packEl) {
+        var size = Number(packEl.dataset.size);
+        packEl.querySelector(".sp-mix-val").textContent = mixText();
+        packEl.querySelector('[data-mix="-1"]').disabled = packRose <= 0;
+        packEl.querySelector('[data-mix="1"]').disabled = packRose >= size;
+      }
       place.disabled = sending || !b.list.length;
     }
 
     items.forEach(function (it) {
-      it.querySelectorAll(".qty-btn").forEach(function (btn) {
+      it.querySelectorAll(".qty-btn[data-step]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var id = it.dataset.id;
           qty[id] = Math.max(0, Math.min(CONFIG.maxPerItem, qty[id] + Number(btn.dataset.step)));
@@ -113,6 +125,17 @@
         });
       });
     });
+
+    if (packEl) {
+      packEl.querySelectorAll(".mix-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          packRose = Math.max(0, Math.min(Number(packEl.dataset.size), packRose + Number(btn.dataset.mix)));
+          render();
+        });
+      });
+    }
+    var giftNoteWrap = document.querySelector(".sp-gift-note");
+    if (f.gift) f.gift.addEventListener("change", function () { giftNoteWrap.hidden = !f.gift.checked; });
 
     function setErr(id, msg, input) {
       document.getElementById(id).textContent = msg;
@@ -156,7 +179,8 @@
           botcheck: false,
           "Order ref": o.ref, "Items": o.items, "Total": "NPR " + o.total,
           "Name": o.name, "Phone": o.phone, "Delivery address": o.address,
-          "Instagram": o.instagram || "-", "Note": o.notes || "-"
+          "Instagram": o.instagram || "-", "Note": o.notes || "-",
+          "Gift": o.gift, "Gift note": o.giftNote || "-"
         })
       }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.success) throw new Error("web3forms"); }); });
     }
@@ -178,7 +202,8 @@
       var o = {
         ref: makeRef(), items: b.text, total: b.total,
         name: clean(f.name.value, 60), phone: clean(f.phone.value, 20), address: clean(f.address.value, 200),
-        instagram: clean(f.instagram.value, 40), notes: clean(f.notes.value, 200), bot: f.bot.checked
+        instagram: clean(f.instagram.value, 40), notes: clean(f.notes.value, 200), bot: f.bot.checked,
+        gift: f.gift && f.gift.checked ? "Yes" : "No", giftNote: f.gift && f.gift.checked ? clean(f.giftNote.value, 150) : ""
       };
 
       // --- anti-spam checks ---
@@ -234,7 +259,7 @@
 
     function showDone(o) {
       document.querySelector(".sp-ref").textContent = o.ref;
-      document.querySelector(".sp-done-summary").textContent = o.items + "\nTotal: NPR " + o.total;
+      document.querySelector(".sp-done-summary").textContent = o.items + "\nTotal: NPR " + o.total + (o.gift === "Yes" ? "\nGift: yes" + (o.giftNote ? " (note: " + o.giftNote + ")" : "") : "");
       document.querySelector(".sp-done-phone").textContent = o.phone;
       document.querySelector(".sp-layout").hidden = true;
       document.querySelector(".sp-hero").hidden = true;

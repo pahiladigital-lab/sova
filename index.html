@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#F7F2E7">
   <meta name="color-scheme" content="light">
   <!-- Security: only allow this site's own files + Google Fonts to load (blocks injected scripts). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- PLACEHOLDER: once you have a domain, set it here and in og:url / og:image (use full https:// URLs) -->
@@ -32,12 +32,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,100&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,100&family=Nunito:wght@400;600;700;800&family=Mukta:wght@500;600&display=swap" rel="stylesheet">
 
   <link rel="preload" as="image" href="assets/hero-soap.jpg" fetchpriority="high">
   <script>document.documentElement.classList.add("js")</script>
   <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
   <script src="script.js" defer></script>
+  <script src="notify.js" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -54,6 +56,7 @@
         <li><a href="shop.html">Shop</a></li>
         <li><a href="#story">Our story</a></li>
         <li><a href="#order">How to order</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
       <a class="btn btn-small btn-leaf" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
         <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
@@ -71,6 +74,7 @@
         <div class="hero-copy">
           <p class="eyebrow"><span class="namaste">Namaste!</span> From Kathmandu, Nepal</p>
           <h1 id="hero-title">Soap and scrub, <em>in one little bar.</em></h1>
+          <p class="np-tag" lang="ne">लुफासहितको साबुन, काठमाडौंबाट मायासहित</p>
           <p class="lead">Sova is soap with real loofah built right in, and no harmful chemicals. Lather up, give your skin a gentle scrub, rinse. That's it.</p>
           <div class="hero-ctas">
             <a class="btn btn-leaf btn-big" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
@@ -262,7 +266,7 @@
         <div>
           <p class="eyebrow">Shop</p>
           <h2 id="shop-band-title">Ready to try a bar?</h2>
-          <p>Pick your scent, fill in your details and place your order online. We'll call or message you to confirm.</p>
+          <p>Pick your scent, or go big with the <strong>Loofah Love Pack</strong> of 5 bars in your own mix. Order online and we'll call or message you to confirm.</p>
         </div>
         <a class="btn btn-turmeric btn-big" href="shop.html">Shop now <span aria-hidden="true">→</span></a>
       </div>
@@ -339,7 +343,7 @@
         <div class="section-head reveal">
           <p class="eyebrow">Coming soon</p>
           <h2 id="soon-title">New bars are brewing.</h2>
-          <p class="section-sub">These aren't available yet. Tap a card to peek.</p>
+          <p class="section-sub">These aren't available yet. Tap a card to peek, or tap <strong>Notify me</strong> to hear first when one launches.</p>
         </div>
         <ul class="soon-grid">
           <li class="reveal">
@@ -353,10 +357,11 @@
                 </span>
                 <span class="flip-face flip-back">
                   <span class="flip-name">Turmeric</span>
-                  <span>In the works. Follow <strong>@sova.np9</strong> to be the first to know when it lands.</span>
+                  <span>In the works. Tap <strong>Notify me</strong> below and we'll tell you the moment it lands.</span>
                 </span>
               </span>
             </button>
+            <button type="button" class="notify-btn" data-variant="Turmeric" aria-controls="notify"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Turmeric launches</span></button>
           </li>
           <li class="reveal">
             <button class="flip flip-neem" type="button" aria-pressed="false">
@@ -369,10 +374,11 @@
                 </span>
                 <span class="flip-face flip-back">
                   <span class="flip-name">Neem</span>
-                  <span>In the works. Follow <strong>@sova.np9</strong> to be the first to know when it lands.</span>
+                  <span>In the works. Tap <strong>Notify me</strong> below and we'll tell you the moment it lands.</span>
                 </span>
               </span>
             </button>
+            <button type="button" class="notify-btn" data-variant="Neem" aria-controls="notify"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Neem launches</span></button>
           </li>
           <li class="reveal">
             <button class="flip flip-aloe" type="button" aria-pressed="false">
@@ -385,12 +391,41 @@
                 </span>
                 <span class="flip-face flip-back">
                   <span class="flip-name">Aloe vera</span>
-                  <span>In the works. Follow <strong>@sova.np9</strong> to be the first to know when it lands.</span>
+                  <span>In the works. Tap <strong>Notify me</strong> below and we'll tell you the moment it lands.</span>
                 </span>
               </span>
             </button>
+            <button type="button" class="notify-btn" data-variant="Aloe vera" aria-controls="notify"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Aloe vera launches</span></button>
           </li>
         </ul>
+
+        <div class="notify" id="notify" hidden>
+          <form id="notify-form" novalidate>
+            <h3 id="notify-title">Get told first when it launches</h3>
+            <fieldset class="notify-pick">
+              <legend>Which new bars?</legend>
+              <label><input type="checkbox" name="variant" value="Turmeric"> Turmeric</label>
+              <label><input type="checkbox" name="variant" value="Neem"> Neem</label>
+              <label><input type="checkbox" name="variant" value="Aloe vera"> Aloe vera</label>
+            </fieldset>
+            <div class="notify-fields">
+              <label>Phone or Instagram
+                <input type="text" id="n-contact" maxlength="40" autocomplete="tel" placeholder="98XXXXXXXX or @yourhandle" required>
+              </label>
+              <label>Name <span class="sp-opt">(optional)</span>
+                <input type="text" id="n-name" maxlength="60" autocomplete="name">
+              </label>
+              <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" id="n-bot" tabindex="-1" autocomplete="off"></label>
+            </div>
+            <p class="notify-small">We'll only contact you about these launches.</p>
+            <button type="submit" class="btn btn-leaf">Notify me</button>
+            <p class="notify-status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="notify-done" hidden tabindex="-1">
+            <p class="notify-done-title">You're on the list!</p>
+            <p>We'll message you when <strong class="notify-done-what"></strong> launches.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -473,6 +508,60 @@
             <span>We only take orders through this website's Shop page and our official Instagram, <strong>@sova.np9</strong>. If another account or website asks you to pay for Sova, it isn't us.</span>
           </p>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-title">Questions, answered.</h2>
+        </div>
+        <div class="faq-list reveal">
+          <details>
+            <summary>What makes Sova different?</summary>
+            <p>Every bar has real loofah built right in, so you lather and gently scrub in one step. No separate scrubber needed.</p>
+          </details>
+          <details>
+            <summary>Which scents can I choose?</summary>
+            <p><strong>Rose ma Dose</strong> is soft and floral, with rose essential oil. <strong>la..la..la.. Vanilla</strong> is sweet, warm and cosy. Turmeric, Neem and Aloe vera are coming soon.</p>
+          </details>
+          <details>
+            <summary>What's inside the soap?</summary>
+            <p>Rose ma Dose: loofah, soap base, glycerine, rose essential oil and food colour. Vanilla is the same loofah bar with a vanilla scent. Tap <strong>Ingredients</strong> on each soap card to see the full list.</p>
+          </details>
+          <details>
+            <summary>How do I make my bar last longer?</summary>
+            <p>Let it dry between uses. Keep it on a soap dish that drains, away from running water.</p>
+          </details>
+          <details>
+            <summary>I have sensitive skin. Can I use it?</summary>
+            <p>Please read the ingredient list first. If you're unsure, try it on a small patch of skin before regular use, and stop using it if your skin feels irritated.</p>
+          </details>
+          <details>
+            <summary>How do I order?</summary>
+            <p>Tap <a href="shop.html">Shop now</a>, pick your soaps, add your details and place your order. Prefer to chat? DM us on Instagram <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+          </details>
+          <details>
+            <summary>How do payment and delivery work?</summary>
+            <!-- PLACEHOLDER: add payment methods (e.g. eSewa / Khalti / cash on delivery), delivery areas, charges and timing once confirmed -->
+            <p>After you place your order, we contact you to confirm payment and delivery details. Once your order is confirmed, we share our WhatsApp number so you can reach us easily.</p>
+          </details>
+          <details>
+            <summary>Do you have a bigger pack?</summary>
+            <p>Yes! The <strong>Loofah Love Pack</strong> is 5 bars in any mix of Rose ma Dose and Vanilla. See the <a href="shop.html">Shop page</a> for the price.</p>
+          </details>
+          <details>
+            <summary>Can I send Sova as a gift?</summary>
+            <p>Yes. Tick <strong>"This is a gift"</strong> when you order and add a short gift note. We'll confirm the details with you when we get in touch.</p>
+          </details>
+          <details>
+            <summary>When will Turmeric, Neem and Aloe vera be ready?</summary>
+            <p>They're still in the works. Tap <strong>Notify me</strong> on the <a href="#soon-title">Coming soon</a> cards and we'll tell you first.</p>
+          </details>
+        </div>
+        <p class="faq-more">Still have a question? Email <a href="mailto:sovasoap.np9@gmail.com">sovasoap.np9@gmail.com</a> or DM <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9<span class="sr-only"> (opens in a new tab)</span></a>.</p>
       </div>
     </section>
   </main>

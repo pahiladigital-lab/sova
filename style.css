@@ -748,3 +748,79 @@ p { margin: 0 0 1em; }
 /* Shown only if a foreign site frames the page and we can't break out */
 html.is-framed body { visibility: hidden; }
 .framed-note { visibility: visible; position: fixed; inset: 0; margin: 0; display: grid; place-content: center; text-align: center; padding: 24px; background: var(--cream); font-weight: 700; z-index: 999; }
+
+/* ---------- Nepali touch ---------- */
+.np-tag {
+  font-family: "Mukta", "Noto Sans Devanagari", var(--font-body); font-weight: 600;
+  font-size: 1.12rem; color: var(--bark); margin: -4px 0 10px; letter-spacing: .01em;
+}
+
+/* ---------- Coming soon: Notify me ---------- */
+.soon-grid > li { display: grid; gap: 10px; justify-items: center; }
+.notify-btn {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  font: inherit; font-weight: 800; font-size: .92rem; color: var(--leaf-deep);
+  background: var(--paper); border: 2px solid var(--sage); border-radius: 999px; padding: 8px 16px; min-height: 42px;
+  transition: background-color .2s, transform .2s var(--ease);
+}
+.notify-btn:hover { background: var(--sage-soft); transform: translateY(-2px); }
+.notify {
+  max-width: 620px; margin: 28px auto 0; background: var(--paper); border-radius: 26px;
+  padding: 22px 20px; box-shadow: var(--shadow);
+}
+.notify h3 { font-size: 1.3rem; margin-bottom: 12px; text-align: center; }
+.notify-pick { border: 0; padding: 0; margin: 0 0 14px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.notify-pick legend { width: 100%; text-align: center; font-weight: 700; font-size: .9rem; margin-bottom: 8px; }
+.notify-pick label {
+  display: inline-flex; align-items: center; gap: 6px; font-weight: 700; cursor: pointer;
+  background: var(--cream); border: 2px solid var(--oat); border-radius: 999px; padding: 6px 14px; min-height: 40px;
+}
+.notify-pick label:has(input:checked) { border-color: var(--leaf); background: var(--sage-soft); }
+.notify-pick input { accent-color: var(--leaf-deep); width: 18px; height: 18px; }
+.notify-fields { display: grid; gap: 12px; }
+@media (min-width: 560px) { .notify-fields { grid-template-columns: 1.2fr 1fr; } }
+.notify-fields label { display: block; font-weight: 700; font-size: .9rem; }
+.notify-fields input[type="text"] {
+  display: block; width: 100%; margin-top: 6px; font: inherit; font-size: 1rem; padding: 10px 12px;
+  border-radius: 12px; border: 2px solid var(--oat); background: var(--cream); color: var(--bark-deep);
+}
+.notify-fields input[type="text"]:focus-visible { border-color: var(--leaf); outline: none; box-shadow: 0 0 0 4px var(--sage-soft); }
+.notify-small { font-size: .82rem; color: var(--bark-soft); margin: 10px 0 14px; }
+.notify form .btn { width: 100%; }
+.notify-status { min-height: 1.3em; margin: 10px 0 0; text-align: center; font-weight: 700; color: #A0331F; font-size: .9rem; }
+.notify-done { text-align: center; outline: none; }
+.notify-done-title { font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; color: var(--leaf-deep); margin-bottom: 4px; }
+
+/* ---------- FAQ ---------- */
+.faq-list { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
+.faq-list details { background: var(--paper); border-radius: 18px; box-shadow: var(--shadow-sm); }
+.faq-list summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  padding: 16px 18px; font-weight: 800; font-size: 1.02rem; border-radius: 18px;
+}
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-list summary::after {
+  content: "+"; flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--sage-soft); color: var(--leaf-deep); font-size: 1.2rem; transition: transform .25s var(--ease);
+}
+.faq-list details[open] summary::after { transform: rotate(45deg); }
+.faq-list details p { margin: 0; padding: 0 18px 18px; color: var(--bark-soft); }
+.faq-more { text-align: center; margin: 22px 0 0; color: var(--bark-soft); }
+
+/* ---------- Shop page: pack + gift ---------- */
+.sp-pack { grid-column: 1 / -1; }
+@media (min-width: 760px) {
+  .sp-pack { display: grid; grid-template-columns: 1fr 1.1fr; }
+  .sp-pack img { height: 100%; aspect-ratio: auto; }
+}
+.sp-tag-pack { background: var(--turmeric-soft); color: var(--bark-deep); }
+.sp-product-row s { color: var(--bark-soft); font-weight: 600; font-size: .85rem; margin-left: 4px; }
+.sp-mix { background: var(--cream); border-radius: 14px; padding: 10px 12px; margin-bottom: 12px; }
+.sp-mix-label { display: block; font-weight: 700; font-size: .85rem; color: var(--bark-soft); margin-bottom: 6px; }
+.sp-mix-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sp-mix-val { font-weight: 800; color: var(--leaf-deep); text-align: center; flex: 1; }
+.sp-gift { border-top: 2px dashed var(--oat); padding-top: 12px; }
+.sp-check { display: inline-flex !important; align-items: center; gap: 10px; cursor: pointer; font-weight: 800; }
+.sp-check input { width: 20px; height: 20px; accent-color: var(--leaf-deep); }
+.sp-gift-note { margin-top: 10px; }
+.basket-lines li span:last-child { white-space: nowrap; }
