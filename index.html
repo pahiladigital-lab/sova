@@ -51,7 +51,7 @@
       <ul class="nav-links">
         <li><a href="#why">Why Sova</a></li>
         <li><a href="#product">The bar</a></li>
-        <li><a href="#shop">Shop</a></li>
+        <li><a href="shop.html">Shop</a></li>
         <li><a href="#story">Our story</a></li>
         <li><a href="#order">How to order</a></li>
       </ul>
@@ -77,7 +77,7 @@
               <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
               Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
             </a>
-            <a class="btn btn-ghost btn-big" href="#product">Meet the bar</a>
+            <a class="btn btn-ghost btn-big" href="shop.html">Shop now</a>
           </div>
           <p class="hero-price"><span class="price-chip">NPR 150</span> each · Rose or Vanilla · DM <strong>@sova.np9</strong> to order</p>
         </div>
@@ -189,10 +189,13 @@
             <li>No harmful chemicals</li>
           </ul>
           <!-- PLACEHOLDER: add bar weight here once confirmed -->
-          <a class="btn btn-leaf" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
-            <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
-            Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
-          </a>
+          <div class="product-ctas">
+            <a class="btn btn-leaf" href="shop.html">Shop now <span aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
+              <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
+              Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -254,69 +257,15 @@
       </div>
     </section>
 
-    <!-- ============ SHOP ============ -->
-    <section class="section shop" id="shop" aria-labelledby="shop-title">
-      <div class="container">
-        <div class="section-head reveal">
+    <!-- ============ SHOP BAND (links to shop.html) ============ -->
+    <section class="shop-band" aria-labelledby="shop-band-title">
+      <div class="container shop-band-inner reveal">
+        <div>
           <p class="eyebrow">Shop</p>
-          <h2 id="shop-title">Fill your basket.</h2>
-          <p class="section-sub">Pick your scents, then send us your order in one tap. We'll confirm payment and delivery with you.</p>
+          <h2 id="shop-band-title">Ready to try a bar?</h2>
+          <p>Pick your scent, fill in your details and place your order online. We'll call or message you to confirm.</p>
         </div>
-
-        <div class="shop-grid reveal">
-          <ul class="shop-items" aria-label="Soaps">
-            <li class="shop-item" data-id="rose" data-name="Rose ma Dose" data-price="150">
-              <img src="assets/scent-rose.jpg" width="640" height="480" loading="lazy" decoding="async" alt="">
-              <div class="shop-item-info">
-                <h3>Rose ma Dose</h3>
-                <p>NPR 150 <span class="shop-scent">· Rose</span></p>
-              </div>
-              <div class="qty" role="group" aria-label="Rose ma Dose quantity">
-                <button type="button" class="qty-btn" data-step="-1" aria-label="Remove one Rose ma Dose">−</button>
-                <output class="qty-val" aria-live="polite">0</output>
-                <button type="button" class="qty-btn" data-step="1" aria-label="Add one Rose ma Dose">+</button>
-              </div>
-            </li>
-            <li class="shop-item" data-id="vanilla" data-name="la..la..la.. Vanilla" data-price="150">
-              <img src="assets/scent-vanilla.jpg" width="640" height="480" loading="lazy" decoding="async" alt="">
-              <div class="shop-item-info">
-                <h3>la..la..la.. Vanilla</h3>
-                <p>NPR 150 <span class="shop-scent">· Vanilla</span></p>
-              </div>
-              <div class="qty" role="group" aria-label="Vanilla quantity">
-                <button type="button" class="qty-btn" data-step="-1" aria-label="Remove one Vanilla">−</button>
-                <output class="qty-val" aria-live="polite">0</output>
-                <button type="button" class="qty-btn" data-step="1" aria-label="Add one Vanilla">+</button>
-              </div>
-            </li>
-          </ul>
-
-          <div class="basket" aria-labelledby="basket-title">
-            <h3 id="basket-title">Your order</h3>
-            <ul class="basket-lines" aria-live="polite"><li class="basket-empty">Your basket is empty. Add a soap to start.</li></ul>
-            <p class="basket-total"><span>Total</span> <strong>NPR <span class="basket-sum">0</span></strong></p>
-            <p class="basket-note">Delivery charge, if any, is confirmed in the chat.</p>
-
-            <div class="basket-fields">
-              <label>Your name <span>(optional)</span><input type="text" id="ord-name" maxlength="60" autocomplete="name"></label>
-              <label>Delivery area <span>(optional)</span><input type="text" id="ord-area" maxlength="80" placeholder="e.g. Baneshwor, Kathmandu" autocomplete="address-level2"></label>
-            </div>
-
-            <button type="button" class="btn btn-leaf btn-big basket-send" disabled>
-              <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
-              Send order on Instagram
-            </button>
-            <a class="basket-email" href="mailto:sovasoap.np9@gmail.com" aria-disabled="true">or send it by email</a>
-            <p class="basket-toast" role="status" aria-live="polite"></p>
-
-            <details class="basket-preview">
-              <summary>See the message we'll send</summary>
-              <pre class="basket-msg"></pre>
-            </details>
-
-            <p class="basket-whatsapp">Once we confirm your order, we'll share our WhatsApp number so you can reach us easily about delivery.</p>
-          </div>
-        </div>
+        <a class="btn btn-turmeric btn-big" href="shop.html">Shop now <span aria-hidden="true">→</span></a>
       </div>
     </section>
 

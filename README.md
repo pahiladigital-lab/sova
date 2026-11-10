@@ -77,14 +77,20 @@ fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.h
 - [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
 - [ ] Phone number (commented out in the footer)
 
-## Shop section
+## Shop page (`shop.html`)
 
-Customers pick Rose ma Dose / Vanilla quantities, see the total, and tap **Send order on Instagram**.
-The order message is copied and a DM with @sova.np9 opens for them to paste and send (Instagram doesn't
-allow websites to pre-fill a DM). "Or send it by email" opens an email to sovasoap.np9@gmail.com with the
-order already written. Nothing is stored and no payment is taken on the site; you confirm payment and
-delivery in the chat. Prices come from `data-price` on each `.shop-item` in `index.html`; change them
-there if prices change.
+The home page links to a separate Shop page (menu "Shop", the yellow "Shop now" band, and buttons).
+Customers pick Rose ma Dose / Vanilla, enter name, phone and delivery address, and tap **Place order**.
+The order is sent automatically to **sovasoap.np9@gmail.com** through Web3Forms (free plan), and the
+customer sees a thank-you screen with an order number (e.g. `SOVA-AWULREG`). No payment is taken on the
+site; you contact the customer to confirm payment and delivery.
+
+Settings are at the top of `shop.js`:
+- `web3formsKey`: the Web3Forms access key (public by design; manage it at web3forms.com).
+- `googleForm`: optional second destination (a Google Form → Google Sheet). Empty = off.
+- Prices come from `data-price` on each `.sp-product` in `shop.html`.
+
+If no destination is set up, the page tells customers to DM @sova.np9 instead of pretending to send.
 
 ## Security
 
@@ -95,7 +101,8 @@ Built-in protections:
   `<script>` in `<head>`, its `sha256-…` hash in the policy must be updated too, or it will be blocked.
 - External links open with `rel="noopener noreferrer"`.
 - Photos have their hidden metadata (including phone GPS location) removed.
-- An "official channel" note tells customers that orders only go through @sova.np9.
+- An "official channel" note tells customers that orders only go through @sova.np9 and this website.
+- The Shop page may only send data to Web3Forms and Google Forms (`connect-src` in its security policy). It has a hidden spam trap and checks every field before sending.
 
 The bigger risks are your **accounts**, not the code:
 - Turn on two-factor authentication for the GitHub account and for the @sova.np9 Instagram.

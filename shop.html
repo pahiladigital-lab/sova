@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop | Sova Loofah Soap</title>
+  <meta name="description" content="Order Sova loofah-infused soap online: Rose ma Dose or Vanilla, NPR 150 each. Pick your bars, add your details and we'll confirm payment and delivery with you.">
+  <meta name="theme-color" content="#F7F2E7">
+  <meta name="color-scheme" content="light">
+  <!-- Security: only this site's files + Google Fonts load; orders may only be sent to Web3Forms and Google Forms. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://docs.google.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sova">
+  <meta property="og:title" content="Shop Sova | Loofah soap, NPR 150">
+  <meta property="og:description" content="Rose ma Dose or Vanilla loofah soap, NPR 150 each. Order online in a minute.">
+  <meta property="og:image" content="assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,100&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <script>document.documentElement.classList.add("js")</script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <script src="shop.js" defer></script>
+</head>
+<body class="shop-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <nav class="nav container" aria-label="Main">
+      <a class="logo" href="index.html" aria-label="Sova home">
+        <img class="logo-img" src="assets/logo.png" width="52" height="52" alt="Sova logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#product">The bar</a></li>
+        <li><a href="shop.html" aria-current="page">Shop</a></li>
+        <li><a href="index.html#story">Our story</a></li>
+      </ul>
+      <a class="btn btn-small btn-ghost back-home" href="index.html"><span aria-hidden="true">←</span> Home</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="sp-hero">
+      <div class="container">
+        <p class="eyebrow">Shop</p>
+        <h1>Fill your basket.</h1>
+        <p class="lead">Every bar has real loofah built in. NPR 150 each. Pick your scents, add your details, and we'll confirm payment and delivery with you.</p>
+      </div>
+    </section>
+
+    <div class="container sp-layout">
+      <form class="sp-form" id="order-form" novalidate aria-describedby="sp-form-note">
+
+        <!-- STEP 1: products -->
+        <fieldset class="sp-step">
+          <legend><span class="sp-num">1</span> Choose your soaps</legend>
+          <ul class="sp-products">
+            <li class="sp-product" data-id="rose" data-name="Rose ma Dose" data-price="150">
+              <img src="assets/scent-rose.jpg" width="640" height="480" decoding="async" alt="Rose ma Dose loofah soap in kraft-paper wrapping with a pink rose label">
+              <div class="sp-product-body">
+                <span class="sp-tag sp-tag-rose">Rose</span>
+                <h2>Rose ma Dose</h2>
+                <p>Soft and floral, with rose essential oil.</p>
+                <div class="sp-product-row">
+                  <strong>NPR 150</strong>
+                  <div class="qty" role="group" aria-label="Rose ma Dose quantity">
+                    <button type="button" class="qty-btn" data-step="-1" aria-label="Remove one Rose ma Dose">−</button>
+                    <output class="qty-val" aria-live="polite">0</output>
+                    <button type="button" class="qty-btn" data-step="1" aria-label="Add one Rose ma Dose">+</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="sp-product" data-id="vanilla" data-name="la..la..la.. Vanilla" data-price="150">
+              <img src="assets/scent-vanilla.jpg" width="640" height="480" decoding="async" alt="la..la..la.. Vanilla loofah soap in kraft-paper wrapping with a cream floral label">
+              <div class="sp-product-body">
+                <span class="sp-tag sp-tag-vanilla">Vanilla</span>
+                <h2>la..la..la.. Vanilla</h2>
+                <p>Sweet, warm and cosy.</p>
+                <div class="sp-product-row">
+                  <strong>NPR 150</strong>
+                  <div class="qty" role="group" aria-label="Vanilla quantity">
+                    <button type="button" class="qty-btn" data-step="-1" aria-label="Remove one Vanilla">−</button>
+                    <output class="qty-val" aria-live="polite">0</output>
+                    <button type="button" class="qty-btn" data-step="1" aria-label="Add one Vanilla">+</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </fieldset>
+
+        <!-- STEP 2: details -->
+        <fieldset class="sp-step">
+          <legend><span class="sp-num">2</span> Your details</legend>
+          <div class="sp-fields">
+            <label>Full name
+              <input type="text" name="name" id="f-name" required minlength="2" maxlength="60" autocomplete="name">
+              <span class="sp-err" id="e-name"></span>
+            </label>
+            <label>Phone number
+              <input type="tel" name="phone" id="f-phone" required maxlength="20" autocomplete="tel" inputmode="tel" placeholder="98XXXXXXXX">
+              <span class="sp-err" id="e-phone"></span>
+            </label>
+            <label class="sp-wide">Delivery address
+              <textarea name="address" id="f-address" required minlength="5" maxlength="200" rows="2" autocomplete="street-address" placeholder="Area, street, nearby landmark, city"></textarea>
+              <span class="sp-err" id="e-address"></span>
+            </label>
+            <label>Instagram <span class="sp-opt">(optional)</span>
+              <input type="text" name="instagram" id="f-ig" maxlength="40" placeholder="@yourhandle">
+            </label>
+            <label>Note <span class="sp-opt">(optional)</span>
+              <input type="text" name="notes" id="f-notes" maxlength="200" placeholder="e.g. gift, best time to call">
+            </label>
+            <!-- spam trap: real people never see or tick this -->
+            <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" name="botcheck" id="f-botcheck" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <p class="sp-privacy" id="sp-form-note">We only use your details to confirm and deliver this order.</p>
+        </fieldset>
+      </form>
+
+      <!-- SUMMARY -->
+      <aside class="sp-summary basket" aria-labelledby="sum-title">
+        <h2 id="sum-title">Order summary</h2>
+        <ul class="basket-lines" aria-live="polite"><li class="basket-empty">No soaps yet. Tap + to add one.</li></ul>
+        <p class="basket-total"><span>Total</span> <strong>NPR <span class="basket-sum">0</span></strong></p>
+        <p class="basket-note">Delivery charge, if any, is confirmed when we contact you.</p>
+        <button type="submit" form="order-form" class="btn btn-leaf btn-big sp-place" disabled>Place order</button>
+        <p class="sp-status" role="status" aria-live="polite"></p>
+        <p class="basket-whatsapp">Once we confirm your order, we'll share our WhatsApp number so you can reach us easily about delivery.</p>
+        <p class="sp-alt">Prefer to chat? <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">DM @sova.np9<span class="sr-only"> on Instagram (opens in a new tab)</span></a></p>
+      </aside>
+    </div>
+
+    <!-- SUCCESS (shown after the order is sent) -->
+    <section class="container sp-done" id="sp-done" hidden tabindex="-1" aria-labelledby="done-title">
+      <div class="sp-done-card">
+        <span class="sp-done-icon" aria-hidden="true">✓</span>
+        <h2 id="done-title">Thank you! Your order is in.</h2>
+        <p>Order <strong class="sp-ref"></strong></p>
+        <pre class="sp-done-summary"></pre>
+        <p>We'll contact you on <strong class="sp-done-phone"></strong> soon to confirm payment and delivery. Once confirmed, we'll share our WhatsApp number.</p>
+        <div class="sp-done-ctas">
+          <a class="btn btn-leaf" href="index.html">Back to home</a>
+          <a class="btn btn-ghost" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">Follow @sova.np9<span class="sr-only"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="logo" href="index.html" aria-label="Sova home">
+          <img class="logo-img logo-footer" src="assets/logo.png" width="88" height="88" alt="Sova logo" loading="lazy">
+        </a>
+        <p class="footer-tag"><strong>Got your back, and your body.</strong><br>Loofah-infused soap, no harmful chemicals. Kind to skin, kind to the planet.</p>
+      </div>
+      <ul class="footer-links">
+        <li>
+          <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
+            <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
+            @sova.np9<span class="sr-only"> on Instagram (opens in a new tab)</span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:sovasoap.np9@gmail.com">
+            <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            sovasoap.np9@gmail.com<span class="sr-only"> (send us an email)</span>
+          </a>
+        </li>
+        <li>
+          <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>
+          Kathmandu, Nepal
+        </li>
+      </ul>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span data-year>2026</span> Sova · From Kathmandu, with love</p>
+      <a href="index.html">Back to home</a>
+    </div>
+  </footer>
+
+  <svg class="sprite" width="0" height="0" aria-hidden="true">
+    <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
+  </svg>
+</body>
+</html>
