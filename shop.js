@@ -37,6 +37,7 @@
       name: document.getElementById("f-name"),
       phone: document.getElementById("f-phone"),
       address: document.getElementById("f-address"),
+      email: document.getElementById("f-email"),
       instagram: document.getElementById("f-ig"),
       notes: document.getElementById("f-notes"),
       gift: document.getElementById("f-gift"),
@@ -146,12 +147,14 @@
       var local = digits.replace(/^977/, "");
       var fake = /^(\d)\1+$/.test(local) || "01234567890123456789".indexOf(local) !== -1 || "98765432109876543210".indexOf(local) !== -1;
       if (!/^\+?[\d\s-]+$/.test(phone) || digits.length < 7 || digits.length > 15 || fake) { setErr("e-phone", "Please enter a valid phone number.", f.phone); ok = false; first = first || f.phone; } else setErr("e-phone", "", f.phone);
+      var email = clean(f.email.value, 80);
+      if (email && !/^[^\s@<>"]+@[^\s@<>"]+\.[A-Za-z]{2,}$/.test(email)) { setErr("e-email", "Please check your email, or leave it empty.", f.email); ok = false; first = first || f.email; } else setErr("e-email", "", f.email);
       if (address.length < 5) { setErr("e-address", "Please enter your delivery address.", f.address); ok = false; first = first || f.address; } else setErr("e-address", "", f.address);
       if (first) first.focus();
       return ok;
     }
 
-    [["name", "e-name"], ["phone", "e-phone"], ["address", "e-address"]].forEach(function (pair) {
+    [["name", "e-name"], ["phone", "e-phone"], ["address", "e-address"], ["email", "e-email"]].forEach(function (pair) {
       f[pair[0]].addEventListener("input", function () {
         if (f[pair[0]].getAttribute("aria-invalid") === "true") setErr(pair[1], "", f[pair[0]]);
       });
@@ -173,7 +176,7 @@
           from_name: "Sova website",
           botcheck: false,
           "Order ref": o.ref, "Items": o.items, "Total": "NPR " + o.total,
-          "Name": o.name, "Phone": o.phone, "Delivery address": o.address,
+          "Name": o.name, "Phone": o.phone, "Email": o.email || "-", "Delivery address": o.address,
           "Instagram": o.instagram || "-", "Note": o.notes || "-",
           "Gift": o.gift, "Gift note": o.giftNote || "-"
         })
@@ -188,7 +191,7 @@
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
           type: "order", ref: o.ref, items: o.items, total: "NPR " + o.total,
-          name: o.name, phone: o.phone, address: o.address, instagram: o.instagram,
+          name: o.name, phone: o.phone, email: o.email, address: o.address, instagram: o.instagram,
           notes: o.notes, gift: o.gift, giftNote: o.giftNote
         })
       });
@@ -203,7 +206,7 @@
 
       var o = {
         ref: makeRef(), items: b.text, total: b.total,
-        name: clean(f.name.value, 60), phone: clean(f.phone.value, 20), address: clean(f.address.value, 200),
+        name: clean(f.name.value, 60), phone: clean(f.phone.value, 20), address: clean(f.address.value, 200), email: clean(f.email.value, 80),
         instagram: clean(f.instagram.value, 40), notes: clean(f.notes.value, 200), bot: f.bot.checked,
         gift: f.gift && f.gift.checked ? "Yes" : "No", giftNote: f.gift && f.gift.checked ? clean(f.giftNote.value, 150) : ""
       };
@@ -263,6 +266,8 @@
       document.querySelector(".sp-ref").textContent = o.ref;
       document.querySelector(".sp-done-summary").textContent = o.items + "\nTotal: NPR " + o.total + (o.gift === "Yes" ? "\nGift: yes" + (o.giftNote ? " (note: " + o.giftNote + ")" : "") : "");
       document.querySelector(".sp-done-phone").textContent = o.phone;
+      document.querySelector(".sp-done-email-addr").textContent = o.email;
+      document.querySelector(".sp-done-email").hidden = !o.email;
       document.querySelector(".sp-layout").hidden = true;
       document.querySelector(".sp-hero").hidden = true;
       var done = document.getElementById("sp-done");

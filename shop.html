@@ -137,6 +137,10 @@
               <input type="tel" name="phone" id="f-phone" required maxlength="20" autocomplete="tel" inputmode="tel" placeholder="98XXXXXXXX">
               <span class="sp-err" id="e-phone"></span>
             </label>
+            <label class="sp-wide">Email <span class="sp-opt">(optional, for order updates)</span>
+              <input type="email" name="email" id="f-email" maxlength="80" autocomplete="email" inputmode="email" placeholder="you@example.com">
+              <span class="sp-err" id="e-email"></span>
+            </label>
             <label class="sp-wide">Delivery address
               <textarea name="address" id="f-address" required minlength="5" maxlength="200" rows="2" autocomplete="street-address" placeholder="Area, street, nearby landmark, city"></textarea>
               <span class="sp-err" id="e-address"></span>
@@ -156,7 +160,7 @@
             <!-- spam trap: real people never see or tick this -->
             <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" name="botcheck" id="f-botcheck" tabindex="-1" autocomplete="off"></label>
           </div>
-          <p class="sp-privacy" id="sp-form-note">We only use your details to confirm and deliver this order.</p>
+          <p class="sp-privacy" id="sp-form-note">We only use your details to confirm and deliver this order. Add your email to get updates when your order is confirmed, on its way and delivered.</p>
         </fieldset>
       </form>
 
@@ -182,6 +186,7 @@
         <p>Order <strong class="sp-ref"></strong></p>
         <pre class="sp-done-summary"></pre>
         <p>We'll contact you on <strong class="sp-done-phone"></strong> soon to confirm payment and delivery. Once confirmed, we'll share our WhatsApp number.</p>
+        <p class="sp-done-email" hidden>We'll also email updates to <strong class="sp-done-email-addr"></strong>.</p>
         <div class="sp-done-ctas">
           <a class="btn btn-leaf" href="index.html">Back to home</a>
           <a class="btn btn-ghost" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">Follow @sova.np9<span class="sr-only"> (opens in a new tab)</span></a>

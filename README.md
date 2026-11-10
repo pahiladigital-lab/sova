@@ -103,6 +103,15 @@ Settings:
 
 If no destination is set up, the page tells customers to DM @sova.np9 instead of pretending to send.
 
+### Automatic customer emails (Google Sheet)
+Customers can add an optional email on the Shop page. In the **Orders** tab, changing **Status** to
+Confirmed, Out for delivery, Delivered or Cancelled emails the customer automatically from
+sovasoap.np9@gmail.com (as "Sova"). The **Updates sent** column records each email, so nothing is sent
+twice; orders without an email are marked "No email". Email wording is at the top of
+`google-sheet/Code.gs` (`EMAILS`), and `WHATSAPP` adds your number to the "Confirmed" email.
+After pasting a new script version: run `setupEmailUpdates` once, then Deploy → Manage deployments →
+Edit → New version.
+
 ## Security
 
 The site is static (no forms, logins, database or third-party scripts), so there is very little to attack.
