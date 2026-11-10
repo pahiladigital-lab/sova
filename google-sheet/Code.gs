@@ -75,3 +75,43 @@ function doPost(e) {
 function doGet() {
   return out_({ ok: true, service: 'Sova orders' });
 }
+
+// Adds Status dropdowns + colours to both tabs. Run once (safe to run again).
+function addStatusDropdowns() {
+  const tabs = [
+    [ORDERS, ORDER_HEADERS, ['New', 'Confirmed', 'Paid', 'Out for delivery', 'Delivered', 'Cancelled']],
+    [NOTIFY, NOTIFY_HEADERS, ['Waiting', 'Messaged', 'Ordered', 'Not interested']]
+  ];
+  const colours = {
+    'New': '#FFF2CC', 'Confirmed': '#CFE2F3', 'Paid': '#D9EAD3', 'Out for delivery': '#FCE5CD',
+    'Delivered': '#B6D7A8', 'Cancelled': '#E0E0E0',
+    'Waiting': '#FFF2CC', 'Messaged': '#CFE2F3', 'Ordered': '#B6D7A8', 'Not interested': '#E0E0E0'
+  };
+  tabs.forEach(function (t) {
+    const sh = sheet_(t[0], t[1]);
+    if (sh.getMaxRows() < 2000) sh.insertRowsAfter(sh.getMaxRows(), 2000 - sh.getMaxRows());
+    const col = t[1].indexOf('Status') + 1;
+    const range = sh.getRange(2, col, sh.getMaxRows() - 1, 1);
+
+    // fill empty Status cells on existing rows with the first option
+    const last = sh.getLastRow();
+    if (last >= 2) {
+      const cells = sh.getRange(2, col, last - 1, 1);
+      cells.setValues(cells.getValues().map(function (r) { return [r[0] || t[2][0]]; }));
+    }
+
+    // dropdown
+    range.setDataValidation(SpreadsheetApp.newDataValidation()
+      .requireValueInList(t[2], true).setAllowInvalid(false).build());
+
+    // colours (replaces any old Status colour rules)
+    const rules = sh.getConditionalFormatRules().filter(function (r) {
+      return !r.getRanges().some(function (g) { return g.getColumn() === col; });
+    });
+    t[2].forEach(function (v) {
+      rules.push(SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo(v).setBackground(colours[v]).setRanges([range]).build());
+    });
+    sh.setConditionalFormatRules(rules);
+  });
+}
