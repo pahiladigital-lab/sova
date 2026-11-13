@@ -1,45 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sova | Loofah-Infused Soap from Kathmandu</title>
-  <meta name="description" content="Sova is a loofah-infused soap with no harmful chemicals, so you cleanse and gently exfoliate in one step. Choose Rose ma Dose or Vanilla. From a small startup in Kathmandu, Nepal. Order on Instagram.">
+  <meta name="description" content="Sova is a loofah-infused soap with no harmful chemicals, so you cleanse and gently exfoliate in one step. Choose Rose ma Dose or Vanilla. From a small startup in Kathmandu, Nepal. Shop online or order on Instagram.">
   <meta name="theme-color" content="#F7F2E7">
   <meta name="color-scheme" content="light">
-  <!-- Security: only allow this site's own files + Google Fonts to load (blocks injected scripts). -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+  <!-- Security: only this site's own files load. Injected scripts and HTML-from-text are blocked. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
-  <!-- PLACEHOLDER: once you have a domain, set it here and in og:url / og:image (use full https:// URLs) -->
-  <!-- <link rel="canonical" href="https://YOUR-DOMAIN/"> -->
+  <!-- If the site moves to its own domain, change this address here, in og:url / og:image below, in shop.html, 404.html and sitemap.xml. -->
+  <link rel="canonical" href="https://pahiladigital-lab.github.io/sova/">
 
   <!-- Open Graph / social sharing -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Sova">
   <meta property="og:title" content="Sova | Soap and scrub in one little bar">
   <meta property="og:description" content="Soap with real loofah built in, no harmful chemicals. Rose ma Dose or Vanilla. From Kathmandu, Nepal. Shop online or DM us on Instagram to order.">
-  <meta property="og:image" content="assets/og-image.jpg">
+  <meta property="og:image" content="https://pahiladigital-lab.github.io/sova/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Rose-shaped Sova soaps with natural loofah built in">
-  <!-- <meta property="og:url" content="https://YOUR-DOMAIN/"> -->
+  <meta property="og:url" content="https://pahiladigital-lab.github.io/sova/">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="assets/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,100&family=Nunito:wght@400;600;700;800&family=Mukta:wght@500;600&display=swap" rel="stylesheet">
+  <!-- Fonts are served from this site (assets/fonts, loaded by style.css), not from Google. -->
 
   <link rel="preload" as="image" href="assets/hero-soap.jpg" fetchpriority="high">
   <script>document.documentElement.classList.add("js")</script>
-  <link rel="stylesheet" href="style.css">
-  <script src="config.js" defer></script>
-  <script src="script.js" defer></script>
-  <script src="notify.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=df88bf04">
+  <script src="config.js?v=aebdfce5" defer></script>
+  <script src="script.js?v=d78c5c54" defer></script>
+  <script src="notify.js?v=d9166cc1" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -50,7 +48,7 @@
       <a class="logo" href="#top" aria-label="Sova, back to top">
         <img class="logo-img" src="assets/logo.png" width="52" height="52" alt="Sova logo">
       </a>
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="#why">Why Sova</a></li>
         <li><a href="#product">The bar</a></li>
         <li><a href="shop.html">Shop</a></li>
@@ -62,6 +60,9 @@
         <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
         <span>Order</span><span class="sr-only"> on Instagram (opens in a new tab)</span>
       </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="nav-toggle-bars" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
     </nav>
   </header>
 
@@ -88,7 +89,7 @@
         <div class="hero-visual">
           <div class="blob blob-hero" aria-hidden="true"></div>
           <!-- Photo: assets/hero-soap.jpg (square). Replace the file to change it. -->
-          <img class="hero-img" src="assets/hero-soap.jpg" width="1000" height="1000"
+          <img class="hero-img" src="assets/hero-soap.jpg" width="900" height="900"
                alt="A hand holding an orange rose-shaped Sova soap in front of bright pink bougainvillea flowers" fetchpriority="high" decoding="async">
           <span class="sticker sticker-loofah" aria-hidden="true">real loofah<br>inside!</span>
         </div>
@@ -136,10 +137,10 @@
           <button class="product-card" type="button" aria-pressed="false" aria-describedby="product-card-hint">
             <span class="product-card-bg" aria-hidden="true"></span>
             <!-- Main photo (tray): assets/product-soap.jpg (portrait 4:5) -->
-            <img src="assets/product-soap.jpg" width="880" height="1100" loading="lazy" decoding="async"
+            <img src="assets/product-soap.jpg" width="800" height="1000" loading="lazy" decoding="async"
                  alt="A tray of Sova loofah soaps wrapped in kraft paper with Rose ma Dose and Vanilla labels, with two red rose-shaped bars on top">
             <!-- Peek photo (loofah close-up): assets/product-peek.jpg (portrait 4:5), fades in on hover / tap -->
-            <img class="peek-img" src="assets/product-peek.jpg" width="880" height="1100" loading="lazy" decoding="async"
+            <img class="peek-img" src="assets/product-peek.jpg" width="800" height="1000" loading="lazy" decoding="async"
                  alt="Two red rose-shaped Sova soaps in a plant pot, one turned to show the loofah built into its base">
             <span class="product-card-badge" aria-hidden="true">
               <strong>Peek inside</strong>
@@ -203,7 +204,7 @@
       </div>
 
       <!-- How to use -->
-      <div class="container howto reveal" aria-labelledby="howto-title">
+      <div class="container howto reveal" role="group" aria-labelledby="howto-title">
         <div class="howto-head">
           <h3 id="howto-title">How to use it</h3>
           <button class="howto-toggle" type="button" aria-pressed="true">
@@ -361,7 +362,7 @@
                 </span>
               </span>
             </button>
-            <button type="button" class="notify-btn" data-variant="Turmeric" aria-controls="notify"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Turmeric launches</span></button>
+            <button type="button" class="notify-btn" data-variant="Turmeric" aria-controls="notify" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Turmeric launches</span></button>
           </li>
           <li class="reveal">
             <button class="flip flip-neem" type="button" aria-pressed="false">
@@ -378,7 +379,7 @@
                 </span>
               </span>
             </button>
-            <button type="button" class="notify-btn" data-variant="Neem" aria-controls="notify"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Neem launches</span></button>
+            <button type="button" class="notify-btn" data-variant="Neem" aria-controls="notify" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Neem launches</span></button>
           </li>
           <li class="reveal">
             <button class="flip flip-aloe" type="button" aria-pressed="false">
@@ -395,9 +396,11 @@
                 </span>
               </span>
             </button>
-            <button type="button" class="notify-btn" data-variant="Aloe vera" aria-controls="notify"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Aloe vera launches</span></button>
+            <button type="button" class="notify-btn" data-variant="Aloe vera" aria-controls="notify" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg> Notify me<span class="sr-only"> when Aloe vera launches</span></button>
           </li>
         </ul>
+
+        <noscript><p class="noscript-note">Notify me needs JavaScript. You can also follow <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9 on Instagram</a> for launch news.</p></noscript>
 
         <div class="notify" id="notify" hidden>
           <form id="notify-form" novalidate>
@@ -415,7 +418,7 @@
               <label>Name <span class="sp-opt">(optional)</span>
                 <input type="text" id="n-name" maxlength="60" autocomplete="name">
               </label>
-              <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" id="n-bot" tabindex="-1" autocomplete="off"></label>
+              <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" id="n-bot" tabindex="-1"></label>
             </div>
             <p class="notify-small">We'll only contact you about these launches.</p>
             <button type="submit" class="btn btn-leaf">Notify me</button>
@@ -467,20 +470,20 @@
           <div class="stepper" data-step="0">
             <div class="stepper-track" aria-hidden="true"><span class="stepper-fill"></span></div>
             <div class="stepper-tabs" role="tablist" aria-label="Ordering steps">
-              <button role="tab" id="st-tab-0" aria-controls="st-panel-0" aria-selected="true" tabindex="0"><span class="st-dot">1</span><span class="st-label">DM us</span></button>
-              <button role="tab" id="st-tab-1" aria-controls="st-panel-1" aria-selected="false" tabindex="-1"><span class="st-dot">2</span><span class="st-label">Confirm</span></button>
-              <button role="tab" id="st-tab-2" aria-controls="st-panel-2" aria-selected="false" tabindex="-1"><span class="st-dot">3</span><span class="st-label">Delivered</span></button>
+              <button type="button" role="tab" id="st-tab-0" aria-controls="st-panel-0" aria-selected="true" tabindex="0"><span class="st-dot">1</span><span class="st-label">Order</span></button>
+              <button type="button" role="tab" id="st-tab-1" aria-controls="st-panel-1" aria-selected="false" tabindex="-1"><span class="st-dot">2</span><span class="st-label">Confirm</span></button>
+              <button type="button" role="tab" id="st-tab-2" aria-controls="st-panel-2" aria-selected="false" tabindex="-1"><span class="st-dot">3</span><span class="st-label">Delivered</span></button>
             </div>
             <div class="stepper-panels">
               <div role="tabpanel" id="st-panel-0" aria-labelledby="st-tab-0" class="st-panel" tabindex="0">
                 <span class="st-emoji" aria-hidden="true">💬</span>
-                <h3>DM us on Instagram</h3>
-                <p>Send a message to <strong>@sova.np9</strong> with which scent (Rose ma Dose or Vanilla) and how many bars you'd like.</p>
+                <h3>Order online or DM us</h3>
+                <p>Pick your soaps on the <a href="shop.html">Shop page</a> and place your order. Or send a message to <strong>@sova.np9</strong> on Instagram with what you'd like.</p>
               </div>
               <div role="tabpanel" id="st-panel-1" aria-labelledby="st-tab-1" class="st-panel" tabindex="0" hidden>
                 <span class="st-emoji" aria-hidden="true">✅</span>
                 <h3>Confirm your order</h3>
-                <p>We'll reply to confirm your bars, the total and your delivery details.</p>
+                <p>We'll contact you to confirm your soaps, the total and your delivery details.</p>
                 <!-- PLACEHOLDER: add accepted payment methods here once confirmed -->
               </div>
               <div role="tabpanel" id="st-panel-2" aria-labelledby="st-tab-2" class="st-panel" tabindex="0" hidden>
@@ -556,6 +559,10 @@
             <summary>Can I send Sova as a gift?</summary>
             <p>Yes. Tick <strong>"This is a gift"</strong> when you order and add a short gift note. We'll confirm the details with you when we get in touch.</p>
           </details>
+          <details id="faq-privacy">
+            <summary>What do you do with my details?</summary>
+            <p>We use your name, phone number, address and email only to confirm and deliver your order, and to send you updates about it. Orders reach us by email through a form service (Web3Forms) and are kept in our private order list on Google Sheets. We don't sell your details or use them for anything else. To have your details removed, email <a href="mailto:sovasoap.np9@gmail.com">sovasoap.np9@gmail.com</a>.</p>
+          </details>
           <details>
             <summary>When will Turmeric, Neem and Aloe vera be ready?</summary>
             <p>They're still in the works. Tap <strong>Notify me</strong> on the <a href="#soon-title">Coming soon</a> cards and we'll tell you first.</p>
@@ -564,6 +571,12 @@
         <p class="faq-more">Still have a question? Email <a href="mailto:sovasoap.np9@gmail.com">sovasoap.np9@gmail.com</a> or DM <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9<span class="sr-only"> (opens in a new tab)</span></a>.</p>
       </div>
     </section>
+
+    <!-- Floating order button -->
+    <a class="sticky-order" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
+      <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
+      Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
+    </a>
   </main>
 
   <!-- ============ 8. FOOTER ============ -->
@@ -602,12 +615,6 @@
       <a href="#top">Back to top ↑</a>
     </div>
   </footer>
-
-  <!-- Sticky order button -->
-  <a class="sticky-order" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
-    <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
-    Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
-  </a>
 
   <!-- Icon sprite -->
   <svg class="sprite" width="0" height="0" aria-hidden="true">

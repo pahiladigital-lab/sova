@@ -10,7 +10,17 @@ const NOTIFY = 'Notify me';
 // New columns are added at the END so older rows stay in place.
 const ORDER_HEADERS = ['Date', 'Order ref', 'Items', 'Total', 'Name', 'Phone', 'Delivery address', 'Instagram', 'Note', 'Gift', 'Gift note', 'Status', 'Email', 'Updates sent'];
 const NOTIFY_HEADERS = ['Date', 'Bars', 'Phone or Instagram', 'Name', 'Status'];
-const MAX_PER_HOUR = 40; // safety cap for the whole site
+const MAX_PER_HOUR = 40; // most orders (and most Notify me requests) saved per hour
+
+// ---- Prices: the Sheet works out every total itself and never trusts the browser. ----
+// If you change a price on the website (shop.html), change it here too, then
+// Deploy → Manage deployments → Edit → New version. If they differ, the order's Note says "CHECK TOTAL".
+const PRICES = { rose: 150, vanilla: 150, pack: 500 };
+const PRODUCT_NAMES = { rose: 'Rose ma Dose', vanilla: 'la..la..la.. Vanilla', pack: 'Loofah Love Pack' };
+const PACK_SIZE = 5;       // bars in one Loofah Love Pack
+const MAX_QTY = 20;        // most of one item per order
+const NOTIFY_BARS = ['Turmeric', 'Neem', 'Aloe vera'];
+const MAX_BODY = 6000;     // biggest request accepted, in characters
 
 // ---- Email settings -------------------------------------------------------
 const SHOP_NAME = 'Sova';
@@ -82,6 +92,36 @@ function validEmail_(v) {
   return /^[^\s@<>"]+@[^\s@<>"]+\.[A-Za-z]{2,}$/.test(String(v || ''));
 }
 
+// Only plain text is accepted for text fields (never objects or lists)
+function text_(v, max) {
+  return typeof v === 'string' || typeof v === 'number' ? safe_(v, max) : '';
+}
+
+function validPhone_(v) {
+  const s = String(v || ''), digits = s.replace(/\D/g, ''), local = digits.replace(/^977/, '');
+  if (!/^\+?[\d\s-]+$/.test(s) || digits.length < 7 || digits.length > 15) return false;
+  return !(/^(\d)\1+$/.test(local) || '01234567890123456789'.indexOf(local) !== -1 || '98765432109876543210'.indexOf(local) !== -1);
+}
+
+// Whole number from 0 to max, or -1 if it is anything else
+function qty_(v, max) {
+  return typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= max ? v : -1;
+}
+
+// First name for the email greeting: letters only, so nobody can slip a link into "Namaste ...!"
+function firstName_(name) {
+  const first = String(name || '').replace(/^'/, '').trim().split(/\s+/)[0] || '';
+  return /^[\p{L}\p{M}'’.-]{1,30}$/u.test(first) ? first : 'there';
+}
+
+function validRef_(v) {
+  return typeof v === 'string' && /^SOVA-[A-Z0-9]{6,8}$/.test(v);
+}
+
+function newRef_() {
+  return 'SOVA-' + Utilities.getUuid().replace(/-/g, '').slice(0, 6).toUpperCase();
+}
+
 function out_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
@@ -91,44 +131,85 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(10000);
-    const d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    console.log('Received: ' + (d.type || 'unknown') + (d.ref ? ' ' + d.ref : ''));
+    const raw = (e && e.postData && e.postData.contents) || '';
+    if (raw.length > MAX_BODY) { console.log('Rejected: request too big'); return out_({ ok: false, error: 'too_big' }); }
+    let d;
+    try { d = JSON.parse(raw); } catch (err) { d = null; }
+    if (!d || typeof d !== 'object' || Array.isArray(d)) { console.log('Rejected: not a valid request'); return out_({ ok: false, error: 'bad_request' }); }
+    console.log('Received: ' + text_(d.type, 10) + ' ' + text_(d.ref, 20));
     if (d.botcheck) { console.log('Ignored: spam trap'); return out_({ ok: true }); }
 
     const cache = CacheService.getScriptCache();
-    const hourKey = 'h' + Utilities.formatDate(new Date(), TZ, 'yyyyMMddHH');
-    const count = Number(cache.get(hourKey) || 0);
-    if (count >= MAX_PER_HOUR) { console.log('Rejected: hourly limit'); return out_({ ok: false, error: 'busy' }); }
-    cache.put(hourKey, String(count + 1), 3600);
-
+    const hour = Utilities.formatDate(new Date(), TZ, 'yyyyMMddHH');
     const now = Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm');
+    // Only requests that pass every check count towards the hourly cap, so junk can't use it up.
+    const underCap = function (key) {
+      const n = Number(cache.get(key + hour) || 0);
+      if (n >= MAX_PER_HOUR) return false;
+      cache.put(key + hour, String(n + 1), 3600);
+      return true;
+    };
 
+    // ---------- Notify me ----------
     if (d.type === 'notify') {
-      sheet_(NOTIFY, NOTIFY_HEADERS).appendRow([now, safe_(d.bars, 80), safe_(d.contact, 40), safe_(d.name, 60), 'Waiting']);
+      const bars = String(typeof d.bars === 'string' ? d.bars : '').split(',').map(function (x) { return x.trim(); })
+        .filter(function (x, i, all) { return NOTIFY_BARS.indexOf(x) !== -1 && all.indexOf(x) === i; });
+      const contact = typeof d.contact === 'string' ? d.contact.trim().slice(0, 40) : '';
+      const isHandle = /^@?[A-Za-z0-9._]{2,30}$/.test(contact) && /[A-Za-z]/.test(contact);
+      if (!bars.length || !(isHandle || validPhone_(contact))) { console.log('Rejected: bad Notify me request'); return out_({ ok: false, error: 'missing' }); }
+      const key = 'n' + contact.toLowerCase() + '|' + bars.join(',');
+      if (cache.get(key)) { console.log('Skipped: same Notify me request again'); return out_({ ok: true }); }
+      if (!underCap('nh')) { console.log('Rejected: hourly limit'); return out_({ ok: false, error: 'busy' }); }
+      cache.put(key, '1', 21600); // the same request is ignored for 6 hours
+      sheet_(NOTIFY, NOTIFY_HEADERS).appendRow([now, bars.join(', '), safe_(contact, 40), text_(d.name, 60), 'Waiting']);
       console.log('Saved Notify me request');
       return out_({ ok: true });
     }
 
-    const missing = ['items', 'name', 'phone', 'address'].filter(function (k) { return !d[k]; });
-    if (missing.length) { console.log('Rejected: missing ' + missing.join(', ')); return out_({ ok: false, error: 'missing' }); }
-    const phoneKey = 'p' + String(d.phone).replace(/\D/g, '');
+    // ---------- Order ----------
+    const c = d.cart && typeof d.cart === 'object' && !Array.isArray(d.cart) ? d.cart : {};
+    const q = { rose: qty_(c.rose, MAX_QTY), vanilla: qty_(c.vanilla, MAX_QTY), pack: qty_(c.pack, MAX_QTY) };
+    const packRose = qty_(c.packRose, PACK_SIZE);
+    if (q.rose < 0 || q.vanilla < 0 || q.pack < 0 || q.rose + q.vanilla + q.pack === 0 || (q.pack > 0 && packRose < 0)) {
+      console.log('Rejected: basket is not valid'); return out_({ ok: false, error: 'bad_cart' });
+    }
+    const name = text_(d.name, 60), phone = text_(d.phone, 20), address = text_(d.address, 200);
+    if (name.replace(/^'/, '').length < 2 || !validPhone_(phone.replace(/^'/, '')) || address.replace(/^'/, '').length < 5) {
+      console.log('Rejected: name, phone or address missing or not valid'); return out_({ ok: false, error: 'missing' });
+    }
+
+    // Items and total are worked out here from our own price list.
+    const lines = []; let total = 0;
+    ['rose', 'vanilla', 'pack'].forEach(function (id) {
+      if (q[id] > 0) {
+        const label = id === 'pack' ? PRODUCT_NAMES.pack + ' (' + packRose + ' Rose + ' + (PACK_SIZE - packRose) + ' Vanilla)' : PRODUCT_NAMES[id];
+        lines.push(label + ' x ' + q[id] + ' = NPR ' + (q[id] * PRICES[id])); total += q[id] * PRICES[id];
+      }
+    });
+    const shown = Number(String(typeof d.total === 'string' || typeof d.total === 'number' ? d.total : '').replace(/\D/g, ''));
+    let note = text_(d.notes, 200);
+    if (shown !== total) note = ('CHECK TOTAL: website showed NPR ' + shown + '. ' + note.replace(/^'/, '')).trim().slice(0, 240);
+
+    const phoneKey = 'p' + phone.replace(/\D/g, '');
     if (cache.get(phoneKey)) { console.log('Rejected: same phone within 2 minutes'); return out_({ ok: false, error: 'too_soon' }); }
+    if (!underCap('oh')) { console.log('Rejected: hourly limit'); return out_({ ok: false, error: 'busy' }); }
     cache.put(phoneKey, '1', 120);
 
+    const ref = validRef_(d.ref) ? d.ref : newRef_();
     const email = validEmail_(d.email) ? safe_(d.email, 80) : '';
+    const gift = d.gift === 'Yes' ? 'Yes' : 'No';
     const sh = sheet_(ORDERS, ORDER_HEADERS);
     sh.appendRow([
-      now, safe_(d.ref, 20), safe_(String(d.items).replace(/\n/g, ' ; '), 400), safe_(d.total, 20),
-      safe_(d.name, 60), safe_(d.phone, 20), safe_(d.address, 200), safe_(d.instagram, 40),
-      safe_(d.notes, 200), safe_(d.gift, 5), safe_(d.giftNote, 150), 'New', email, ''
+      now, ref, lines.join(' ; '), 'NPR ' + total, name, phone, address, text_(d.instagram, 40),
+      note, gift, gift === 'Yes' ? text_(d.giftNote, 150) : '', 'New', email, ''
     ]);
-    console.log('Saved order ' + d.ref + ' in row ' + sh.getLastRow());
-    return out_({ ok: true });
+    console.log('Saved order ' + ref + ' in row ' + sh.getLastRow() + (shown !== total ? ' (CHECK TOTAL)' : ''));
+    return out_({ ok: true, ref: ref, total: total });
   } catch (err) {
     console.error('Error: ' + err);
     return out_({ ok: false, error: 'server' });
   } finally {
-    try { lock.releaseLock(); } catch (e) {}
+    try { lock.releaseLock(); } catch (e2) {}
   }
 }
 
@@ -162,11 +243,11 @@ function onStatusChange(e) {
     if (MailApp.getRemainingDailyQuota() < 1) { sentCell.setValue((sent ? sent + '; ' : '') + status + ' NOT SENT (daily limit)'); return; }
 
     const data = {
-      ref: get('Order ref'), name: get('Name').split(' ')[0] || 'there', items: get('Items').split(' ; ').join('\n'),
+      ref: validRef_(get('Order ref')) ? get('Order ref') : '', name: firstName_(get('Name')), items: get('Items').split(' ; ').join('\n'),
       total: get('Total'), whatsapp: WHATSAPP ? '\nYou can reach us on WhatsApp: ' + WHATSAPP : ''
     };
     const fill = (s) => s.replace(/\{(\w+)\}/g, function (_, k) { return data[k] || ''; });
-    const subject = fill(tpl.subject);
+    const subject = fill(tpl.subject).replace(/\s+/g, ' ');
     const lines = tpl.lines.map(fill);
 
     MailApp.sendEmail({

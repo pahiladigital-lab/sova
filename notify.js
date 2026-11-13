@@ -31,10 +31,12 @@
       btn.addEventListener("click", function () {
         panel.hidden = false;
         form.hidden = false; done.hidden = true;
+        document.querySelectorAll(".notify-btn").forEach(function (b) { b.setAttribute("aria-expanded", "true"); });
         boxes.forEach(function (b) { if (b.value === btn.dataset.variant) b.checked = true; });
         if (!openedAt) openedAt = Date.now();
         status.textContent = "";
-        panel.scrollIntoView({ behavior: "smooth", block: "center" });
+        var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        panel.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
         setTimeout(function () { contact.focus({ preventScroll: true }); }, 350);
       });
     });
@@ -68,9 +70,9 @@
         })
       }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.success) throw new Error("send"); }); }));
       if (SHEET) jobs.push(fetch(SHEET, {
-        method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        method: "POST", redirect: "follow", headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({ type: "notify", bars: picked.join(", "), contact: c, name: n })
-      }));
+      }).then(function (r) { return r.json(); }).then(function (j) { if (!j || !j.ok) throw new Error("sheet"); }));
       Promise.allSettled(jobs).then(function (res) {
         if (res.some(function (r) { return r.status === "fulfilled"; })) { markSent(); showDone(picked); }
         else status.textContent = "Sorry, that didn't send. Please try again, or follow @sova.np9 on Instagram for launch news.";

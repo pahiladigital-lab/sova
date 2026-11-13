@@ -20,11 +20,18 @@
   }
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Heavier, non-essential fonts wait until the page has finished loading
+  window.addEventListener("load", function () {
+    setTimeout(function () { document.documentElement.classList.add("fonts-late"); }, 300);
+  });
+
   document.addEventListener("DOMContentLoaded", function () {
     var year = document.querySelector("[data-year]");
     if (year) year.textContent = new Date().getFullYear();
 
     initHeader();
+    initMenu();
+    initHashDetails();
     initReveal();
     initFloaters();
     initProductCard();
@@ -41,6 +48,38 @@
     var onScroll = function () { header.classList.toggle("is-scrolled", window.scrollY > 8); };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+  }
+
+  /* Phone menu: the ☰ button opens the same links the desktop header shows */
+  function initMenu() {
+    var header = document.querySelector(".site-header");
+    var btn = document.querySelector(".nav-toggle");
+    var links = document.getElementById("nav-links");
+    if (!header || !btn || !links) return;
+    function set(open) {
+      header.classList.toggle("is-menu-open", open);
+      btn.setAttribute("aria-expanded", String(open));
+      btn.querySelector(".sr-only").textContent = open ? "Close menu" : "Open menu";
+    }
+    btn.addEventListener("click", function () { set(btn.getAttribute("aria-expanded") !== "true"); });
+    links.addEventListener("click", function (e) { if (e.target.closest("a")) set(false); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); }
+    });
+    document.addEventListener("click", function (e) { if (!header.contains(e.target)) set(false); });
+    window.addEventListener("resize", function () { if (window.innerWidth >= 820) set(false); });
+  }
+
+  /* Links such as index.html#faq-privacy open that FAQ answer */
+  function initHashDetails() {
+    function openTarget() {
+      var id = decodeURIComponent(location.hash.slice(1));
+      if (!/^[A-Za-z][\w-]*$/.test(id)) return;
+      var el = document.getElementById(id);
+      if (el && el.tagName === "DETAILS") el.open = true;
+    }
+    window.addEventListener("hashchange", openTarget);
+    openTarget();
   }
 
   /* Scroll-reveal sections */
@@ -65,14 +104,22 @@
   function initFloaters() {
     var box = document.querySelector(".hero-float");
     if (!box || reduceMotion) return;
-    var leafSvg = '<svg viewBox="0 0 24 24"><path d="M12 2c6 4 9 9 9 13a9 9 0 0 1-18 0c0-4 3-9 9-13z" fill="currentColor"/><path d="M12 7v15" stroke="#F7F2E7" stroke-width="1.4" stroke-linecap="round"/></svg>';
+    var NS = "http://www.w3.org/2000/svg";
+    function leaf() {
+      var svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "0 0 24 24");
+      var body = document.createElementNS(NS, "path");
+      body.setAttribute("d", "M12 2c6 4 9 9 9 13a9 9 0 0 1-18 0c0-4 3-9 9-13z"); body.setAttribute("fill", "currentColor");
+      var vein = document.createElementNS(NS, "path");
+      vein.setAttribute("d", "M12 7v15"); vein.setAttribute("stroke", "#F7F2E7"); vein.setAttribute("stroke-width", "1.4"); vein.setAttribute("stroke-linecap", "round");
+      svg.appendChild(body); svg.appendChild(vein); return svg;
+    }
     var count = window.innerWidth < 720 ? 9 : 14;
     var frag = document.createDocumentFragment();
     for (var i = 0; i < count; i++) {
       var isLeaf = i % 3 === 0;
       var el = document.createElement("span");
       el.className = "floater " + (isLeaf ? "leaf" : "bubble");
-      if (isLeaf) el.innerHTML = leafSvg;
+      if (isLeaf) el.appendChild(leaf());
       var size = isLeaf ? rand(16, 28) : rand(10, 34);
       el.style.setProperty("--size", size + "px");
       el.style.setProperty("--dur", rand(14, 26) + "s");

@@ -1,18 +1,26 @@
 # Sova website
 
-A one-page site for **Sova**, a loofah-infused soap from Kathmandu (Rose ma Dose and la..la..la.. Vanilla).
-It's plain HTML, CSS and JavaScript with no build step and no libraries.
+The website for **Sova**, a loofah-infused soap from Kathmandu (Rose ma Dose and la..la..la.. Vanilla).
+Live at https://pahiladigital-lab.github.io/sova/
+
+It is plain HTML, CSS and JavaScript: no build step, no libraries, free hosting on GitHub Pages.
 
 ```
-index.html   all page content
-style.css    design (colours are at the top, in :root)
-script.js    animations & interactions
-assets/      images, favicon
+index.html        home page
+shop.html         shop page (basket + order form)
+404.html          "page not found" page
+style.css         design (colours are at the top, in :root)
+script.js         menu, animations and small interactions (both pages)
+shop.js           basket and ordering
+notify.js         "Notify me" form for coming-soon bars
+config.js         the two addresses orders are sent to
+assets/           photos, logo, icons
+assets/fonts/     the site's fonts (served from this site, not from Google)
+google-sheet/     backup copy of the script that runs inside the "Sova orders" Google Sheet
+sitemap.xml       list of pages for search engines
 ```
 
 ## Preview locally
-
-Open `index.html` in a browser, or run a tiny local server (better, matches hosting):
 
 ```bash
 cd sova
@@ -23,114 +31,118 @@ Then visit http://localhost:8000
 
 ## Change the photos
 
-The site uses your real photos (cropped, compressed and with phone location data removed).
-To swap one, save the new photo with the **exact same file name** in `assets/` and it appears
-automatically. No code changes needed.
+To swap a photo, save the new one with the **exact same file name** in `assets/`. No code changes needed.
 
 | File | Where it shows | Best shape / size |
 |---|---|---|
-| `assets/hero-soap.jpg` | Big image at the top | Square, ~1000×1000 |
-| `assets/product-soap.jpg` | "The bar" card, main photo (tray) | Portrait 4:5, ~880×1100 |
-| `assets/product-peek.jpg` | "The bar" card, photo shown on hover / tap (loofah close-up) | Portrait 4:5, ~880×1100 |
+| `assets/hero-soap.jpg` | Big image at the top of the home page | Square, ~900×900 |
+| `assets/product-soap.jpg` | "The soaps" card, main photo (tray) | Portrait 4:5, ~800×1000 |
+| `assets/product-peek.jpg` | "The soaps" card, photo shown on hover / tap (loofah close-up) | Portrait 4:5, ~800×1000 |
 | `assets/story.jpg` | "Our story" (founding team) | Portrait 4:5, ~880×1100 |
 | `assets/ig-1.jpg` … `assets/ig-6.jpg` | Instagram grid | Square, ~600×600 |
 | `assets/og-image.jpg` | Preview when the link is shared (WhatsApp, Facebook…) | 1200×630 |
-| `assets/scent-rose.jpg`, `assets/scent-vanilla.jpg` | Small photos on the Rose ma Dose / Vanilla cards | Square, 240×240 |
+| `assets/scent-rose.jpg`, `assets/scent-vanilla.jpg` | Rose ma Dose / Vanilla cards (home and shop) | 4:3, ~640×480 |
 | `assets/pack.jpg` | Loofah Love Pack photo on the Shop page | 4:3, ~800×600 |
 | `assets/logo.png` | Logo in the header and footer | Square PNG with transparent corners, 240×240 |
 | `assets/favicon-32.png`, `favicon-64.png`, `apple-touch-icon.png` | Browser tab / phone home screen icon | 32×32, 64×64, 180×180 |
 
 Tips:
-- Keep photos as **JPG** and under ~200 KB each (use https://squoosh.app to shrink them).
-- If you also change the **alt text** (the description in `alt="…"` in `index.html`), describe what's really in your photo.
-- **Logo:** your Sova logo is `assets/logo.png`. Replace that file to update it everywhere.
+- Keep photos as **JPG**, ideally under ~150 KB each (https://squoosh.app shrinks them). Big photos make the site slow on phones.
+- Phone photos carry hidden data such as GPS location. Squoosh removes it; do not upload photos straight from the camera roll.
+- If you change a photo, also change its description (`alt="…"` in the HTML) to say what is really in it.
 
 ## Change text
 
-All text is in `index.html`. Search for the words you want to change and edit them.
-Spots waiting for your details are marked with `PLACEHOLDER` comments. Search for that word.
+Home page text is in `index.html`, shop text in `shop.html`. Search for the words you want and edit them.
+Spots waiting for your details are marked with `PLACEHOLDER` comments.
 
 Colours: edit the variables at the top of `style.css` (`--leaf-deep`, `--turmeric`, etc.).
 
-## Deploy for free
+### If you edit `style.css` or any `.js` file yourself
+Each page loads these files with a version label, for example `style.css?v=df88bf04`. Phones keep old copies
+for a while, so after you change one of these files, change the label next to it in `index.html`, `shop.html`
+and `404.html` to anything new (for example `?v=2`). Otherwise some visitors keep seeing the old version.
 
-### GitHub Pages
-1. Create a repository on GitHub and upload the contents of this folder (so `index.html` is at the top level).
-2. Go to the repo's **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, branch **main**, folder **/ (root)**, then click **Save**.
-4. After a minute your site is live at `https://YOUR-USERNAME.github.io/REPO-NAME/`.
+## Prices
 
-### Netlify (drag and drop)
-1. Go to https://app.netlify.com/drop
-2. Drag this whole folder onto the page. You get a live link in seconds.
+A price lives in **two places**, and both must match:
+1. `shop.html`: the visible text ("NPR 150") and the `data-price="150"` on that product.
+2. `google-sheet/Code.gs` → `PRICES` (inside the Google Sheet's script). The Sheet works out every
+   order's total from this list and never trusts the number the browser sends.
 
-### Custom domain (later)
-Both GitHub Pages and Netlify let you attach your own domain in their settings. Once you have one,
-fill in the commented-out `canonical` and `og:url` lines in `<head>` of `index.html` and change
-`og:image` to the full address, e.g. `https://yourdomain.com/assets/og-image.jpg`.
-
-## Placeholders still to fill in
-
-- [ ] Bar weight (not shown yet)
-- [ ] Confirm the Vanilla ingredient name (currently "vanilla fragrance", search for CONFIRM in index.html)
-- [ ] Payment methods (How to order → step 2, and the FAQ answer "How do payment and delivery work?")
-- [ ] Delivery areas, charges and timing (How to order → step 3)
-- [ ] Website domain (canonical / og:url / full og:image URL in `<head>`)
-- [ ] Phone number (commented out in the footer)
+If they differ, the order is still saved with the Sheet's total and its **Note** starts with
+`CHECK TOTAL: website showed NPR …`. You will also see that note if someone tampers with the page.
+After editing the script: **Deploy → Manage deployments → Edit → Version: New version → Deploy**.
 
 ## Shop page (`shop.html`)
 
-The home page links to a separate Shop page (menu "Shop", the yellow "Shop now" band, and buttons).
-Customers pick Rose ma Dose / Vanilla, enter name, phone and delivery address, and tap **Place order**.
-The order is sent automatically to **sovasoap.np9@gmail.com** through Web3Forms (free plan), and the
-customer sees a thank-you screen with an order number (e.g. `SOVA-AWULREG`). No payment is taken on the
-site; you contact the customer to confirm payment and delivery.
+Customers pick Rose ma Dose, Vanilla or the **Loofah Love Pack** (5 bars, any mix), enter name, phone and
+delivery address (email optional), can tick **This is a gift**, and tap **Place order**. Then:
 
-The **Loofah Love Pack** (5 bars, any Rose/Vanilla mix, `data-price="500"`) and a **gift option**
-(tick box + optional note) are on the Shop page; both appear in the order email.
+- the order is emailed to **sovasoap.np9@gmail.com** through Web3Forms (free plan), and
+- it is saved as a row in the **Orders** tab of the private "Sova orders" Google Sheet.
 
-The **Notify me** form on the home page (Coming soon cards) emails launch requests the same way
-(`notify.js`), with the same anti-spam checks.
+The customer sees a thank-you screen with an order number such as `SOVA-GQYHP9` only when at least one of
+those two confirmed it received the order. No payment is taken on the site; you contact the customer to
+confirm payment and delivery.
 
-Settings:
-- `config.js` → `web3formsKey`: the Web3Forms access key (public by design; manage it at web3forms.com).
-  Used by both the Shop page and Notify me.
-- `config.js` → `sheetUrl`: the Google Apps Script web-app address. Every order lands as a row in the
-  **Orders** tab and every Notify me request in the **Notify me** tab of the private "Sova orders" Sheet
-  (owned by sovasoap.np9@gmail.com). A backup of that script is in `google-sheet/Code.gs`.
-  Keep the Sheet private: it holds customers' phone numbers and addresses.
-- Prices come from `data-price` on each `.sp-product` in `shop.html`.
+The **Notify me** form on the home page (Coming soon cards) works the same way and fills the **Notify me** tab.
 
-If no destination is set up, the page tells customers to DM @sova.np9 instead of pretending to send.
+Settings (`config.js`):
+- `web3formsKey`: the Web3Forms access key (public by design; manage it at web3forms.com).
+- `sheetUrl`: the Google Apps Script web-app address.
+
+Keep the Sheet private: it holds customers' phone numbers and addresses.
 
 ### Automatic customer emails (Google Sheet)
-Customers can add an optional email on the Shop page. In the **Orders** tab, changing **Status** to
-Confirmed, Out for delivery, Delivered or Cancelled emails the customer automatically from
-sovasoap.np9@gmail.com (as "Sova"). The **Updates sent** column records each email, so nothing is sent
-twice; orders without an email are marked "No email". Email wording is at the top of
-`google-sheet/Code.gs` (`EMAILS`), and `WHATSAPP` adds your number to the "Confirmed" email.
-After pasting a new script version: run `setupEmailUpdates` once, then Deploy → Manage deployments →
-Edit → New version.
+In the **Orders** tab, changing **Status** to Confirmed, Out for delivery, Delivered or Cancelled emails the
+customer automatically from sovasoap.np9@gmail.com (as "Sova"), if they gave an email. The **Updates sent**
+column records each email, so nothing is sent twice. Email wording is at the top of `google-sheet/Code.gs`
+(`EMAILS`), and `WHATSAPP` adds your number to the "Confirmed" email.
+
+After pasting a new version of the script into Apps Script: run `setupEmailUpdates` once, then
+**Deploy → Manage deployments → Edit → Version: New version → Deploy** (this keeps the same address).
+
+## If the site moves to its own domain
+
+Change the address `https://pahiladigital-lab.github.io/sova/` to the new one in:
+`index.html` and `shop.html` (`canonical`, `og:url`, `og:image`), `sitemap.xml`, and in `404.html` change
+`<base href="/sova/">` to `<base href="/">`. Also update the Website URL in the Web3Forms dashboard, and
+re-create any printed QR codes if the old address stops redirecting.
+
+## Still to fill in
+
+- [ ] Payment methods and delivery areas, charges and timing (How to order steps 2–3 and the FAQ answer)
+- [ ] Bar weight
+- [ ] Confirm the Vanilla ingredient name (currently "vanilla fragrance"; search for CONFIRM in `index.html`)
+- [ ] Phone / WhatsApp number (footer, and `WHATSAPP` in the Sheet script)
 
 ## Security
 
-The site is static (no forms, logins, database or third-party scripts), so there is very little to attack.
-Built-in protections:
-- **Content Security Policy** (`<meta http-equiv="Content-Security-Policy">` in `index.html`): only this site's
-  own files and Google Fonts can load, so injected scripts are blocked. If you edit the one-line inline
-  `<script>` in `<head>`, its `sha256-…` hash in the policy must be updated too, or it will be blocked.
-- External links open with `rel="noopener noreferrer"`.
-- Photos have their hidden metadata (including phone GPS location) removed.
-- An "official channel" note tells customers that orders only go through @sova.np9 and this website.
-- The Shop page may only send data to Web3Forms (`connect-src` in its security policy) and our Google Sheet script.
-- Anti-spam on the Shop page (limits are at the top of `shop.js`): no sending within 5 seconds of opening
-  the page, 2 minutes between orders, max 3 orders per hour per browser, a "same order again?" check,
-  rejection of fake phone numbers (e.g. 0000000000), and a hidden spam trap that silently drops bots.
-- Both pages refuse to be shown inside another website's frame (they hide and link to the real site).
-- Limits live in the visitor's browser, so a determined person can get around them. Always confirm an
-  order with the customer before delivering. If spam starts, enable spam protection in the Web3Forms dashboard.
+What protects the site:
+- **Strict security policy** on every page (`Content-Security-Policy` in each `<head>`): only this site's own
+  files can load, pages can only send data to Web3Forms and the Sheet script, and text can never be turned
+  into HTML or script. If you edit the one-line inline `<script>` in `<head>`, its `sha256-…` value in the
+  policy must be updated too.
+- **No third parties in the page**: fonts are served from `assets/fonts/`, so visitors' browsers contact
+  nobody else just to view the site.
+- **The Sheet does not trust the browser**: it re-checks every field, builds the item list and total from its
+  own prices, ignores repeats and junk, and blocks spreadsheet formulas. Customer emails only ever contain
+  text the Sheet built itself.
+- **Anti-spam** on the forms: a short wait before sending, limits per browser and per phone number, fake
+  phone numbers rejected, and a hidden trap for bots.
+- Both pages refuse to be shown inside another website's frame.
+- External links open safely in a new tab, and photos carry no hidden location data.
 
-The bigger risks are your **accounts**, not the code:
-- Turn on two-factor authentication for the GitHub account and for the @sova.np9 Instagram.
-- In the repo, go to **Settings → Pages** and tick **Enforce HTTPS**.
-- Only give write access to the repo to people who need it.
+What code cannot do for you:
+- **Always confirm an order with the customer before delivering**, and never click links inside an order
+  email; anyone can send a fake one.
+- Turn on **two-factor authentication** for Gmail (sovasoap.np9), Instagram (@sova.np9) and GitHub.
+- In the repo, **Settings → Pages → Enforce HTTPS** must be ticked.
+- Only give write access to the repo and the Sheet to people who need it.
+- If spam starts, enable spam protection in the Web3Forms dashboard.
+
+## Deploying
+
+The site is published by GitHub Pages from the `main` branch (Settings → Pages → Deploy from a branch →
+`main` / root). Every push to `main` goes live in about a minute.

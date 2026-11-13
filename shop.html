@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,30 +7,34 @@
   <meta name="description" content="Order Sova loofah-infused soap online: Rose ma Dose or Vanilla, NPR 150 each. Pick your bars, add your details and we'll confirm payment and delivery with you.">
   <meta name="theme-color" content="#F7F2E7">
   <meta name="color-scheme" content="light">
-  <!-- Security: only this site's files + Google Fonts load; orders may only be sent to Web3Forms (email) and our Google Sheet. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
+  <!-- Security: only this site's own files load; orders may only be sent to Web3Forms (email) and our Google Sheet. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
+  <link rel="canonical" href="https://pahiladigital-lab.github.io/sova/shop.html">
+
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pahiladigital-lab.github.io/sova/shop.html">
   <meta property="og:site_name" content="Sova">
   <meta property="og:title" content="Shop Sova | Loofah soap, NPR 150">
   <meta property="og:description" content="Rose ma Dose or Vanilla loofah soap, NPR 150 each. Order online in a minute.">
-  <meta property="og:image" content="assets/og-image.jpg">
+  <meta property="og:image" content="https://pahiladigital-lab.github.io/sova/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rose-shaped Sova soaps with natural loofah built in">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="assets/favicon-64.png" sizes="64x64" type="image/png">
   <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..700,100&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts are served from this site (assets/fonts, loaded by style.css), not from Google. -->
 
   <script>document.documentElement.classList.add("js")</script>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
-  <script src="config.js" defer></script>
-  <script src="shop.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=df88bf04">
+  <script src="script.js?v=d78c5c54" defer></script>
+  <script src="config.js?v=aebdfce5" defer></script>
+  <script src="shop.js?v=e2d57062" defer></script>
 </head>
 <body class="shop-page" id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -40,13 +44,17 @@
       <a class="logo" href="index.html" aria-label="Sova home">
         <img class="logo-img" src="assets/logo.png" width="52" height="52" alt="Sova logo">
       </a>
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="index.html#product">The bar</a></li>
         <li><a href="shop.html" aria-current="page">Shop</a></li>
         <li><a href="index.html#story">Our story</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
       </ul>
       <a class="btn btn-small btn-ghost back-home" href="index.html"><span aria-hidden="true">←</span> Home</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="nav-toggle-bars" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
     </nav>
   </header>
 
@@ -58,6 +66,10 @@
         <p class="lead">Every bar has real loofah built in. NPR 150 each, or 5 for NPR 500 with the Loofah Love Pack. Pick your soaps, add your details, and we'll confirm payment and delivery with you.</p>
       </div>
     </section>
+
+    <noscript>
+      <div class="container"><p class="noscript-note">Online ordering needs JavaScript, which is switched off in your browser. To order, send us a message on Instagram <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9</a> or email <a href="mailto:sovasoap.np9@gmail.com">sovasoap.np9@gmail.com</a>.</p></div>
+    </noscript>
 
     <div class="container sp-layout">
       <form class="sp-form" id="order-form" novalidate aria-describedby="sp-form-note">
@@ -158,9 +170,9 @@
               </label>
             </div>
             <!-- spam trap: real people never see or tick this -->
-            <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" name="botcheck" id="f-botcheck" tabindex="-1" autocomplete="off"></label>
+            <label class="sp-hp" aria-hidden="true">Leave this empty<input type="checkbox" name="botcheck" id="f-botcheck" tabindex="-1"></label>
           </div>
-          <p class="sp-privacy" id="sp-form-note">We only use your details to confirm and deliver this order. Add your email to get updates when your order is confirmed, on its way and delivered.</p>
+          <p class="sp-privacy" id="sp-form-note">We only use your details to confirm and deliver this order. Add your email to get updates when your order is confirmed, on its way and delivered. <a href="index.html#faq-privacy">How we use your details</a></p>
         </fieldset>
       </form>
 

@@ -1,5 +1,6 @@
 /* Sova shop page: basket + order form.
-   Orders are sent to whichever services are set up below (both during the trial). */
+   Each order is emailed to Sova (Web3Forms) and saved in the private Google Sheet (addresses in config.js).
+   The Sheet works out its own total from its own price list, so nothing here is trusted for money. */
 (function () {
   "use strict";
 
@@ -78,7 +79,11 @@
         var nm = it.dataset.id === "pack" ? it.dataset.name + " (" + mixText() + ")" : it.dataset.name;
         if (q > 0) { list.push({ name: nm, q: q, line: q * p }); total += q * p; }
       });
-      return { list: list, total: total, text: list.map(function (l) { return l.name + " x " + l.q + " = NPR " + l.line; }).join("\n") };
+      return {
+        list: list, total: total,
+        text: list.map(function (l) { return l.name + " x " + l.q + " = NPR " + l.line; }).join("\n"),
+        cart: { rose: qty.rose || 0, vanilla: qty.vanilla || 0, pack: qty.pack || 0, packRose: packRose }
+      };
     }
 
     function render() {
@@ -160,10 +165,14 @@
       });
     });
 
+    // Order number: 6 random characters, without look-alikes such as 0/O or 1/I.
     function makeRef() {
-      var t = Date.now().toString(36).toUpperCase().slice(-5);
-      var r = Math.floor(Math.random() * 1296).toString(36).toUpperCase();
-      return "SOVA-" + t + (r.length < 2 ? "0" + r : r);
+      var alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", out = "", i;
+      var buf = new Uint8Array(6);
+      if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(buf);
+      else for (i = 0; i < 6; i++) buf[i] = Math.floor(Math.random() * 256);
+      for (i = 0; i < 6; i++) out += alphabet.charAt(buf[i] % alphabet.length);
+      return "SOVA-" + out;
     }
 
     function viaWeb3Forms(o) {
@@ -184,16 +193,18 @@
     }
 
     function viaSheet(o) {
-      // Apps Script can't answer cross-site reads reliably, so send "no-cors": the row is added,
-      // and the customer's confirmation comes from the email (Web3Forms) which we can check.
+      // Plain-text POST (no preflight). The Sheet replies {ok:true} when the row is saved,
+      // or {ok:false, error:"..."} when it refuses the order. If the reply can't be read, it counts as "not confirmed".
       return fetch(CONFIG.sheetUrl, {
-        method: "POST", mode: "no-cors",
+        method: "POST", redirect: "follow",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
-          type: "order", ref: o.ref, items: o.items, total: "NPR " + o.total,
+          type: "order", ref: o.ref, cart: o.cart, items: o.items, total: "NPR " + o.total,
           name: o.name, phone: o.phone, email: o.email, address: o.address, instagram: o.instagram,
           notes: o.notes, gift: o.gift, giftNote: o.giftNote
         })
+      }).then(function (r) { return r.json(); }).then(function (j) {
+        if (!j || !j.ok) { var err = new Error("sheet"); err.code = (j && j.error) || "unknown"; throw err; }
       });
     }
 
@@ -205,7 +216,7 @@
       if (!validate()) { status.textContent = "Please check the highlighted details."; return; }
 
       var o = {
-        ref: makeRef(), items: b.text, total: b.total,
+        ref: makeRef(), items: b.text, total: b.total, cart: b.cart,
         name: clean(f.name.value, 60), phone: clean(f.phone.value, 20), address: clean(f.address.value, 200), email: clean(f.email.value, 80),
         instagram: clean(f.instagram.value, 40), notes: clean(f.notes.value, 200), bot: f.bot.checked,
         gift: f.gift && f.gift.checked ? "Yes" : "No", giftNote: f.gift && f.gift.checked ? clean(f.giftNote.value, 150) : ""
@@ -237,10 +248,10 @@
       }
       confirmDuplicate = false;
 
-      var jobs = [];
-      if (CONFIG.web3formsKey) jobs.push(viaWeb3Forms(o));
-      if (CONFIG.sheetUrl) jobs.push(viaSheet(o));
-      if (!jobs.length && DEMO) jobs.push(new Promise(function (ok) { setTimeout(ok, 700); }));
+      var jobs = [], names = [];
+      if (CONFIG.web3formsKey) { jobs.push(viaWeb3Forms(o)); names.push("email"); }
+      if (CONFIG.sheetUrl) { jobs.push(viaSheet(o)); names.push("sheet"); }
+      if (!jobs.length && DEMO) { jobs.push(new Promise(function (ok) { setTimeout(ok, 700); })); names.push("demo"); }
       if (!jobs.length) {
         status.textContent = "Online ordering isn't switched on yet. Please DM us on Instagram @sova.np9 to order.";
         return;
@@ -251,10 +262,15 @@
       status.textContent = "";
 
       Promise.allSettled(jobs).then(function (res) {
+        // "Thank you" only when a channel confirmed it received the order.
         var anyOk = res.some(function (r) { return r.status === "fulfilled"; });
+        var sheetIdx = names.indexOf("sheet");
+        var sheetCode = sheetIdx !== -1 && res[sheetIdx].status === "rejected" && res[sheetIdx].reason ? res[sheetIdx].reason.code : "";
         sending = false; place.textContent = "Place order"; render();
         if (!anyOk) {
-          status.textContent = "Sorry, your order couldn't be sent. Please check your internet and try again, or DM us on Instagram @sova.np9.";
+          status.textContent = sheetCode === "too_soon"
+            ? "We already have an order from this phone number in the last couple of minutes. Please wait a moment, or DM us on Instagram @sova.np9."
+            : "Sorry, your order couldn't be sent. Please check your internet and try again, or DM us on Instagram @sova.np9.";
           return;
         }
         writeLog({ t: Date.now(), f: fingerprint(o) });

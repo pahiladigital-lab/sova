@@ -3,6 +3,23 @@
    Colours live in :root below. Change them there and the whole site updates.
    ========================================================================== */
 
+/* ---------- Fonts (served from this site; all three are open-source, SIL Open Font License) ---------- */
+@font-face {
+  font-family: "Fraunces"; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url("assets/fonts/fraunces-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Nunito"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url("assets/fonts/nunito-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Mukta"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("assets/fonts/mukta-devanagari.woff2") format("woff2");
+  unicode-range: U+0900-097F, U+1CD0-1CF4, U+1CF7-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B0A;
+}
+
 :root {
   /* Brand palette */
   --cream: #F7F2E7;        /* page background */
@@ -11,6 +28,7 @@
   --sage: #A9BFA0;
   --sage-soft: #DDE7D5;
   --leaf: #4E7A4A;
+  --leaf-text: #3F6B3C;     /* small green labels: dark enough to read on every background */
   --leaf-deep: #2F5130;    /* primary buttons, headings accents */
   --bark: #7A5638;
   --bark-deep: #3B2A1E;    /* body text */
@@ -34,7 +52,7 @@
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; /* keeps headings clear of the sticky header */ }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -93,7 +111,7 @@ p { margin: 0 0 1em; }
 
 .eyebrow {
   font-weight: 800; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--leaf); margin-bottom: .8em;
+  color: var(--leaf-text); margin-bottom: .8em;
 }
 
 /* ---------- Buttons ---------- */
@@ -144,6 +162,39 @@ p { margin: 0 0 1em; }
 }
 .nav-links a:hover::after { transform: scaleX(1); }
 @media (min-width: 820px) { .nav-links { display: flex; } }
+
+/* Phone menu (below 820px): ☰ button opens the links as a panel under the header */
+.nav-toggle {
+  display: none; flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  border: 2px solid var(--leaf-deep); background: transparent; color: var(--leaf-deep);
+  align-items: center; justify-content: center; padding: 0;
+}
+.js .nav-toggle { display: inline-flex; }
+.nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
+  display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor;
+  transition: transform .25s var(--ease), opacity .2s;
+}
+.nav-toggle-bars { position: relative; }
+.nav-toggle-bars::before, .nav-toggle-bars::after { content: ""; position: absolute; left: 0; }
+.nav-toggle-bars::before { top: -6px; }
+.nav-toggle-bars::after { top: 6px; }
+.is-menu-open .nav-toggle-bars { background: transparent; }
+.is-menu-open .nav-toggle-bars::before { transform: translateY(6px) rotate(45deg); }
+.is-menu-open .nav-toggle-bars::after { transform: translateY(-6px) rotate(-45deg); }
+@media (max-width: 819.98px) {
+  .nav { gap: 10px; }
+  .nav .logo { margin-right: auto; }
+  .is-menu-open .nav-links {
+    display: flex; flex-direction: column; gap: 0;
+    position: absolute; left: 0; right: 0; top: 100%;
+    background: var(--cream); padding: 6px var(--gutter) 14px;
+    border-bottom: 1px solid rgba(59, 42, 30, .1); box-shadow: 0 18px 30px -22px rgba(59, 42, 30, .55);
+  }
+  .is-menu-open .nav-links a { display: block; padding: 13px 4px; font-size: 1.05rem; border-bottom: 1px solid var(--oat); }
+  .is-menu-open .nav-links li:last-child a { border-bottom: 0; }
+  .is-menu-open .nav-links a::after { display: none; }
+}
+@media (min-width: 820px) { .js .nav-toggle { display: none; } }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; padding: 32px 0 96px; overflow: hidden; }
@@ -751,9 +802,12 @@ html.is-framed body { visibility: hidden; }
 
 /* ---------- Nepali touch ---------- */
 .np-tag {
-  font-family: "Mukta", "Noto Sans Devanagari", var(--font-body); font-weight: 600;
+  /* The Nepali font (100 KB) is switched on after the page has loaded, so it never slows the first view. */
+  font-family: "Noto Sans Devanagari", var(--font-body); font-weight: 600;
   font-size: 1.12rem; color: var(--bark); margin: -4px 0 10px; letter-spacing: .01em;
 }
+
+.fonts-late .np-tag { font-family: "Mukta", "Noto Sans Devanagari", var(--font-body); }
 
 /* ---------- Coming soon: Notify me ---------- */
 .soon-grid > li { display: grid; gap: 10px; justify-items: center; }
@@ -821,6 +875,18 @@ html.is-framed body { visibility: hidden; }
 .sp-mix-val { font-weight: 800; color: var(--leaf-deep); text-align: center; flex: 1; }
 .sp-gift { border-top: 2px dashed var(--oat); padding-top: 12px; }
 .sp-check { display: inline-flex !important; align-items: center; gap: 10px; cursor: pointer; font-weight: 800; }
-.sp-check input { width: 20px; height: 20px; accent-color: var(--leaf-deep); }
+.sp-check input { width: 24px; height: 24px; accent-color: var(--leaf-deep); }
 .sp-gift-note { margin-top: 10px; }
 .basket-lines li span:last-child { white-space: nowrap; }
+
+/* ---------- Messages when JavaScript is off ---------- */
+.noscript-note {
+  max-width: 620px; margin: 24px auto; background: var(--turmeric-soft); color: var(--bark-deep);
+  border-radius: var(--radius-sm); padding: 14px 16px; font-weight: 700; text-align: center;
+}
+
+/* ---------- 404 page ---------- */
+.notfound { min-height: 100vh; display: grid; place-content: center; justify-items: center; gap: 6px; text-align: center; padding: 40px var(--gutter); }
+.notfound h1 { font-size: clamp(1.9rem, 6vw, 3rem); max-width: 16ch; }
+.notfound .lead { margin-bottom: 18px; }
+.notfound-ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
