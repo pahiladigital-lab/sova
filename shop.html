@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#F7F2E7">
   <meta name="color-scheme" content="light">
   <!-- Security: only this site's own files load; orders may only be sent to Web3Forms (email) and our Google Sheet. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-BGCoihfCnd8b1jaNZi6YpOGKaD6J6F6xIiSTYp5pUF8='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <link rel="canonical" href="https://pahiladigital-lab.github.io/sova/shop.html">
@@ -30,11 +30,13 @@
 
   <!-- Fonts are served from this site (assets/fonts, loaded by style.css), not from Google. -->
 
-  <script>document.documentElement.classList.add("js")</script>
-  <link rel="stylesheet" href="style.css?v=df88bf04">
-  <script src="script.js?v=d78c5c54" defer></script>
+  <script>document.documentElement.classList.add("js");try{if(/[?&]lang=ne\b/.test(location.search)||(!/[?&]lang=en\b/.test(location.search)&&localStorage.getItem("sova-lang")==="ne"))document.documentElement.classList.add("i18n-pending")}catch(e){}</script>
+  <link rel="stylesheet" href="style.css?v=1e53858d">
+  <script src="script.js?v=045f5d17" defer></script>
+  <script src="i18n-ne.js?v=b8a8bfb3" defer></script>
+  <script src="i18n.js?v=e7167582" defer></script>
   <script src="config.js?v=aebdfce5" defer></script>
-  <script src="shop.js?v=e2d57062" defer></script>
+  <script src="shop.js?v=21a7f4cd" defer></script>
 </head>
 <body class="shop-page" id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -50,8 +52,10 @@
         <li><a href="shop.html" aria-current="page">Shop</a></li>
         <li><a href="index.html#story">Our story</a></li>
         <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="track.html">Track order</a></li>
       </ul>
       <a class="btn btn-small btn-ghost back-home" href="index.html"><span aria-hidden="true">←</span> Home</a>
+      <button class="lang-btn" type="button" data-no-i18n aria-label="नेपालीमा हेर्नुहोस् (View in Nepali)"><span class="lang-btn-text" lang="ne">नेपाली</span></button>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
         <span class="nav-toggle-bars" aria-hidden="true"></span><span class="sr-only">Open menu</span>
       </button>
@@ -70,6 +74,8 @@
     <noscript>
       <div class="container"><p class="noscript-note">Online ordering needs JavaScript, which is switched off in your browser. To order, send us a message on Instagram <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9</a> or email <a href="mailto:sovasoap.np9@gmail.com">sovasoap.np9@gmail.com</a>.</p></div>
     </noscript>
+
+    <div class="container"><p class="sp-reorder" role="status" hidden>We've refilled your basket with your last order. Change anything you like, then add your details.</p></div>
 
     <div class="container sp-layout">
       <form class="sp-form" id="order-form" novalidate aria-describedby="sp-form-note">
@@ -180,12 +186,22 @@
       <aside class="sp-summary basket" aria-labelledby="sum-title">
         <h2 id="sum-title">Order summary</h2>
         <ul class="basket-lines" aria-live="polite"><li class="basket-empty">No soaps yet. Tap + to add one.</li></ul>
+        <div class="promo">
+          <label for="f-promo">Promo code <span class="sp-opt">(optional)</span></label>
+          <div class="promo-row">
+            <input type="text" id="f-promo" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done">
+            <button type="button" class="btn btn-small btn-ghost promo-btn">Apply</button>
+          </div>
+          <p class="promo-msg" role="status" aria-live="polite"></p>
+        </div>
+        <p class="basket-discount" hidden><span>Discount <span class="promo-code" data-no-i18n></span></span> <strong>− NPR <span class="basket-off">0</span></strong></p>
         <p class="basket-total"><span>Total</span> <strong>NPR <span class="basket-sum">0</span></strong></p>
         <p class="basket-note">Delivery charge, if any, is confirmed when we contact you.</p>
         <button type="submit" form="order-form" class="btn btn-leaf btn-big sp-place" disabled>Place order</button>
         <p class="sp-status" role="status" aria-live="polite"></p>
         <p class="basket-whatsapp">Once we confirm your order, we'll share our WhatsApp number so you can reach us easily about delivery.</p>
         <p class="sp-alt"><a href="index.html#faq">Questions? Read our FAQ</a></p>
+        <p class="sp-alt">Already ordered? <a href="track.html">Track your order</a></p>
         <p class="sp-alt">Prefer to chat? <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">DM @sova.np9<span class="sr-only"> on Instagram (opens in a new tab)</span></a></p>
       </aside>
     </div>
@@ -195,12 +211,13 @@
       <div class="sp-done-card">
         <span class="sp-done-icon" aria-hidden="true">✓</span>
         <h2 id="done-title">Thank you! Your order is in.</h2>
-        <p>Order <strong class="sp-ref"></strong></p>
+        <p>Order <strong class="sp-ref" data-no-i18n></strong></p>
         <pre class="sp-done-summary"></pre>
-        <p>We'll contact you on <strong class="sp-done-phone"></strong> soon to confirm payment and delivery. Once confirmed, we'll share our WhatsApp number.</p>
-        <p class="sp-done-email" hidden>We'll also email updates to <strong class="sp-done-email-addr"></strong>.</p>
+        <p>We'll contact you on <strong class="sp-done-phone" data-no-i18n></strong> soon to confirm payment and delivery. Once confirmed, we'll share our WhatsApp number.</p>
+        <p class="sp-done-email" hidden>We'll also email updates to <strong class="sp-done-email-addr" data-no-i18n></strong>.</p>
         <div class="sp-done-ctas">
-          <a class="btn btn-leaf" href="index.html">Back to home</a>
+          <a class="btn btn-leaf sp-track" href="track.html">Track this order</a>
+          <a class="btn btn-ghost" href="index.html">Back to home</a>
           <a class="btn btn-ghost" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">Follow @sova.np9<span class="sr-only"> (opens in a new tab)</span></a>
         </div>
       </div>

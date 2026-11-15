@@ -67,7 +67,7 @@
       if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); }
     });
     document.addEventListener("click", function (e) { if (!header.contains(e.target)) set(false); });
-    window.addEventListener("resize", function () { if (window.innerWidth >= 820) set(false); });
+    window.addEventListener("resize", function () { if (window.innerWidth >= 1080) set(false); });
   }
 
   /* Links such as index.html#faq-privacy open that FAQ answer */

@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#F7F2E7">
   <meta name="color-scheme" content="light">
   <!-- Security: only this site's own files load. Injected scripts and HTML-from-text are blocked. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-BGCoihfCnd8b1jaNZi6YpOGKaD6J6F6xIiSTYp5pUF8='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://api.web3forms.com https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- If the site moves to its own domain, change this address here, in og:url / og:image below, in shop.html, 404.html and sitemap.xml. -->
@@ -33,10 +33,12 @@
   <!-- Fonts are served from this site (assets/fonts, loaded by style.css), not from Google. -->
 
   <link rel="preload" as="image" href="assets/hero-soap.jpg" fetchpriority="high">
-  <script>document.documentElement.classList.add("js")</script>
-  <link rel="stylesheet" href="style.css?v=df88bf04">
+  <script>document.documentElement.classList.add("js");try{if(/[?&]lang=ne\b/.test(location.search)||(!/[?&]lang=en\b/.test(location.search)&&localStorage.getItem("sova-lang")==="ne"))document.documentElement.classList.add("i18n-pending")}catch(e){}</script>
+  <link rel="stylesheet" href="style.css?v=1e53858d">
   <script src="config.js?v=aebdfce5" defer></script>
-  <script src="script.js?v=d78c5c54" defer></script>
+  <script src="script.js?v=045f5d17" defer></script>
+  <script src="i18n-ne.js?v=b8a8bfb3" defer></script>
+  <script src="i18n.js?v=e7167582" defer></script>
   <script src="notify.js?v=d9166cc1" defer></script>
 </head>
 <body id="top">
@@ -55,11 +57,13 @@
         <li><a href="#story">Our story</a></li>
         <li><a href="#order">How to order</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="track.html">Track order</a></li>
       </ul>
       <a class="btn btn-small btn-leaf" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
         <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
         <span>Order</span><span class="sr-only"> on Instagram (opens in a new tab)</span>
       </a>
+      <button class="lang-btn" type="button" data-no-i18n aria-label="नेपालीमा हेर्नुहोस् (View in Nepali)"><span class="lang-btn-text" lang="ne">नेपाली</span></button>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
         <span class="nav-toggle-bars" aria-hidden="true"></span><span class="sr-only">Open menu</span>
       </button>
@@ -426,7 +430,7 @@
           </form>
           <div class="notify-done" hidden tabindex="-1">
             <p class="notify-done-title">You're on the list!</p>
-            <p>We'll message you when <strong class="notify-done-what"></strong> launches.</p>
+            <p>We'll message you when <strong class="notify-done-what" data-no-i18n></strong> launches.</p>
           </div>
         </div>
       </div>

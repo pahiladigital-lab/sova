@@ -7,11 +7,15 @@ It is plain HTML, CSS and JavaScript: no build step, no libraries, free hosting 
 
 ```
 index.html        home page
-shop.html         shop page (basket + order form)
+shop.html         shop page (basket + order form + promo code)
+track.html        "Track my order" page
 404.html          "page not found" page
 style.css         design (colours are at the top, in :root)
 script.js         menu, animations and small interactions (both pages)
-shop.js           basket and ordering
+shop.js           basket, promo code and ordering
+track.js          order tracking
+i18n.js           English / नेपाली switch
+i18n-ne.js        the Nepali wording (edit translations here)
 notify.js         "Notify me" form for coming-soon bars
 config.js         the two addresses orders are sent to
 assets/           photos, logo, icons
@@ -60,8 +64,8 @@ Colours: edit the variables at the top of `style.css` (`--leaf-deep`, `--turmeri
 
 ### If you edit `style.css` or any `.js` file yourself
 Each page loads these files with a version label, for example `style.css?v=df88bf04`. Phones keep old copies
-for a while, so after you change one of these files, change the label next to it in `index.html`, `shop.html`
-and `404.html` to anything new (for example `?v=2`). Otherwise some visitors keep seeing the old version.
+for a while, so after you change one of these files, change the label next to it in `index.html`, `shop.html`,
+`track.html` and `404.html` to anything new (for example `?v=2`). Otherwise some visitors keep seeing the old version.
 
 ## Prices
 
@@ -103,10 +107,43 @@ column records each email, so nothing is sent twice. Email wording is at the top
 After pasting a new version of the script into Apps Script: run `setupEmailUpdates` once, then
 **Deploy → Manage deployments → Edit → Version: New version → Deploy** (this keeps the same address).
 
+## Promo codes (Google Sheet → "Promo codes" tab)
+
+Each row is one code. The website only asks the Sheet whether a code is real, so codes cannot be faked.
+
+| Column | Meaning |
+|---|---|
+| Code | Letters and numbers only, 3–20 characters (e.g. `TIHAR10`) |
+| Type | `percent` or `amount` |
+| Value | 10 = 10% off, or NPR 10 off |
+| Min order | Smallest order (NPR) the code works on; 0 = any |
+| Max uses | How many orders may use it in total; 0 = no limit |
+| Used | Filled in automatically, for your information. The real count is the number of orders in the Orders tab that used the code and are not Cancelled, so cancelling a fake order gives that use back |
+| Expires | Last day it works (a date), or empty |
+| Once per phone | `Yes` = each phone number can use it once |
+| Active | `Yes` to switch on, `No` to switch off |
+
+Orders show the code and discount in the **Promo** and **Discount** columns. Run `setupPromoCodes` once to create the tab.
+
+## Track my order (`track.html`)
+
+Customers type their order number and phone number. The Sheet answers with the **Status** only (never names,
+addresses or items), and only when both match. Six tries lock that order number for 15 minutes, so nobody
+can guess a phone number. "Paid" shows as Confirmed on the page.
+The "Confirmed" and "Out for delivery" emails link to this page; the "Delivered" email has an
+**Order the same again** button that refills the basket.
+
+## English / नेपाली
+
+The header button switches language and remembers the choice. Pages are written in English; the Nepali
+wording is in `i18n-ne.js` (English on the left, Nepali on the right). To fix a translation, change the right
+side. If you change English text on a page, change the matching left side too, or that piece stays English.
+Product names, prices and order details are kept in English. A link ending in `?lang=ne` opens the site in Nepali.
+
 ## If the site moves to its own domain
 
 Change the address `https://pahiladigital-lab.github.io/sova/` to the new one in:
-`index.html` and `shop.html` (`canonical`, `og:url`, `og:image`), `sitemap.xml`, and in `404.html` change
+`index.html` and `shop.html` (`canonical`, `og:url`, `og:image`), `sitemap.xml`, `SITE_URL` in the Sheet script, and in `404.html` change
 `<base href="/sova/">` to `<base href="/">`. Also update the Website URL in the Web3Forms dashboard, and
 re-create any printed QR codes if the old address stops redirecting.
 
@@ -115,6 +152,7 @@ re-create any printed QR codes if the old address stops redirecting.
 - [ ] Payment methods and delivery areas, charges and timing (How to order steps 2–3 and the FAQ answer)
 - [ ] Bar weight
 - [ ] Confirm the Vanilla ingredient name (currently "vanilla fragrance"; search for CONFIRM in `index.html`)
+- [ ] Have a fluent Nepali speaker check `i18n-ne.js`
 - [ ] Phone / WhatsApp number (footer, and `WHATSAPP` in the Sheet script)
 
 ## Security
@@ -131,7 +169,9 @@ What protects the site:
   text the Sheet built itself.
 - **Anti-spam** on the forms: a short wait before sending, limits per browser and per phone number, fake
   phone numbers rejected, and a hidden trap for bots.
-- Both pages refuse to be shown inside another website's frame.
+- **Promo codes and tracking are decided by the Sheet**: the discount is worked out there, a promo check never
+  says anything about a customer, and tracking answers with one of six status words and nothing else.
+- All pages refuse to be shown inside another website's frame.
 - External links open safely in a new tab, and photos carry no hidden location data.
 
 What code cannot do for you:

@@ -54,6 +54,19 @@
     function mixText() { var size = packEl ? Number(packEl.dataset.size) : 5; return packRose + " Rose + " + (size - packRose) + " Vanilla"; }
     var LOG_KEY = "sova-order-log";
 
+    // Promo code. The Sheet decides whether a code is real and what it is worth; this page only shows the result.
+    var promoEl = {
+      input: document.getElementById("f-promo"), btn: document.querySelector(".promo-btn"), msg: document.querySelector(".promo-msg"),
+      line: document.querySelector(".basket-discount"), code: document.querySelector(".promo-code"), off: document.querySelector(".basket-off")
+    };
+    var promo = null;        // { code, type, value, min } once the Sheet has accepted it; { code, pending:true } if the reply couldn't be read
+    var promoBusy = false, promoChecks = [];
+    function discountFor(total) {
+      if (!promo || promo.pending || !total || total < (promo.min || 0)) return 0;
+      var d = promo.type === "percent" ? Math.round(total * promo.value / 100) : Math.round(promo.value);
+      return Math.max(0, Math.min(total, d));
+    }
+
     function readLog() {
       try { var v = JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; }
     }
@@ -79,8 +92,9 @@
         var nm = it.dataset.id === "pack" ? it.dataset.name + " (" + mixText() + ")" : it.dataset.name;
         if (q > 0) { list.push({ name: nm, q: q, line: q * p }); total += q * p; }
       });
+      var off = discountFor(total);
       return {
-        list: list, total: total,
+        list: list, subtotal: total, discount: off, total: total - off,
         text: list.map(function (l) { return l.name + " x " + l.q + " = NPR " + l.line; }).join("\n"),
         cart: { rose: qty.rose || 0, vanilla: qty.vanilla || 0, pack: qty.pack || 0, packRose: packRose }
       };
@@ -100,6 +114,16 @@
         e.textContent = "No soaps yet. Tap + to add one."; lines.appendChild(e);
       }
       sum.textContent = b.total;
+      if (promoEl.line) {
+        promoEl.line.hidden = !b.discount;
+        promoEl.off.textContent = b.discount;
+        promoEl.code.textContent = promo ? "(" + promo.code + ")" : "";
+        if (promo && !promo.pending && b.list.length && !b.discount && promo.min > b.subtotal) {
+          promoEl.msg.textContent = "Code " + promo.code + " needs an order of NPR " + promo.min + " or more.";
+        } else if (promo && !promo.pending && b.discount) {
+          promoEl.msg.textContent = "Code " + promo.code + " applied.";
+        }
+      }
       items.forEach(function (it) {
         var q = qty[it.dataset.id];
         it.querySelector(".qty-val").textContent = q;
@@ -135,6 +159,75 @@
         });
       });
     }
+    /* ---- promo code ---- */
+    var PROMO_ERR = {
+      invalid: "Sorry, that code isn't valid.",
+      expired: "Sorry, that code has expired.",
+      used_up: "Sorry, that code has been fully used.",
+      already_used: "This code has already been used with this phone number.",
+      busy: "Too many tries. Please wait a little and try again."
+    };
+    function setPromo(p, msg) {
+      promo = p;
+      promoEl.input.readOnly = !!p;
+      promoEl.btn.textContent = p ? "Remove" : "Apply";
+      promoEl.msg.textContent = msg || "";
+      render();
+    }
+    function checkPromo() {
+      if (promoBusy) return;
+      if (promo) { promoEl.input.value = ""; setPromo(null, ""); promoEl.input.focus(); return; }
+      var code = clean(promoEl.input.value, 20).toUpperCase().replace(/\s+/g, "");
+      promoEl.input.value = code;
+      if (!code) { promoEl.msg.textContent = "Type your code first."; return; }
+      if (!/^[A-Z0-9]{3,20}$/.test(code)) { promoEl.msg.textContent = PROMO_ERR.invalid; return; }
+      var b = basket();
+      if (!b.list.length) { promoEl.msg.textContent = "Add a soap first, then apply your code."; return; }
+      var now = Date.now();
+      promoChecks = promoChecks.filter(function (t) { return t > now - 600e3; });
+      if (promoChecks.length >= 8) { promoEl.msg.textContent = PROMO_ERR.busy; return; }
+      promoChecks.push(now);
+      if (!CONFIG.sheetUrl) {
+        if (DEMO) { setPromo({ code: code, type: "percent", value: 10, min: 0 }, ""); return; }
+        promoEl.msg.textContent = "Promo codes aren't switched on yet."; return;
+      }
+      promoBusy = true; promoEl.btn.disabled = true; promoEl.msg.textContent = "Checking…";
+      fetch(CONFIG.sheetUrl, {
+        method: "POST", redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ type: "promo", code: code, cart: b.cart })
+      }).then(function (r) { return r.json(); }).then(function (j) {
+        var val = j ? Number(j.value) : 0;
+        if (j && j.ok && (j.type === "percent" || j.type === "amount") && val > 0 && val < 1e6 && !(j.type === "percent" && val > 100)) {
+          setPromo({ code: code, type: j.type, value: val, min: Math.max(0, Number(j.min) || 0) }, "");
+        } else if (j && (j.error === "busy" || j.error === "server")) {
+          // The checker is busy. Keep the code with the order; the Sheet checks it again when the order is saved.
+          setPromo({ code: code, pending: true }, "We'll check code " + code + " and apply it when we confirm your order.");
+        } else if (j && j.error === "min") {
+          promoEl.msg.textContent = "This code needs an order of NPR " + (Number(j.min) || 0) + " or more.";
+        } else {
+          promoEl.msg.textContent = PROMO_ERR[j && j.error] || PROMO_ERR.invalid;
+        }
+      }).catch(function () {
+        // The reply couldn't be read. Keep the code with the order; Sova applies it when confirming.
+        setPromo({ code: code, pending: true }, "We'll check code " + code + " and apply it when we confirm your order.");
+      }).then(function () { promoBusy = false; promoEl.btn.disabled = false; });
+    }
+    if (promoEl.btn) {
+      promoEl.btn.addEventListener("click", checkPromo);
+      promoEl.input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); checkPromo(); } });
+    }
+
+    /* ---- "Order the same again" link from the Delivered email: shop.html?reorder=rose-vanilla-packs-roseInPack ---- */
+    (function () {
+      var m = /[?&]reorder=(\d{1,2})-(\d{1,2})-(\d{1,2})-(\d)(?:&|$)/.exec(location.search);
+      if (!m) return;
+      var cap = function (n) { return Math.max(0, Math.min(CONFIG.maxPerItem, Number(n))); };
+      qty.rose = cap(m[1]); qty.vanilla = cap(m[2]); qty.pack = cap(m[3]);
+      packRose = Math.max(0, Math.min(packEl ? Number(packEl.dataset.size) : 5, Number(m[4])));
+      if (qty.rose + qty.vanilla + qty.pack > 0) { var note = document.querySelector(".sp-reorder"); if (note) note.hidden = false; }
+    })();
+
     var giftNoteWrap = document.querySelector(".sp-gift-note");
     if (f.gift) f.gift.addEventListener("change", function () { giftNoteWrap.hidden = !f.gift.checked; });
 
@@ -185,6 +278,7 @@
           from_name: "Sova website",
           botcheck: false,
           "Order ref": o.ref, "Items": o.items, "Total": "NPR " + o.total,
+          "Promo code": o.promo ? o.promo + (o.discount ? " (- NPR " + o.discount + ")" : " (not applied yet: check it in the Sheet)") : "-",
           "Name": o.name, "Phone": o.phone, "Email": o.email || "-", "Delivery address": o.address,
           "Instagram": o.instagram || "-", "Note": o.notes || "-",
           "Gift": o.gift, "Gift note": o.giftNote || "-"
@@ -201,10 +295,11 @@
         body: JSON.stringify({
           type: "order", ref: o.ref, cart: o.cart, items: o.items, total: "NPR " + o.total,
           name: o.name, phone: o.phone, email: o.email, address: o.address, instagram: o.instagram,
-          notes: o.notes, gift: o.gift, giftNote: o.giftNote
+          notes: o.notes, gift: o.gift, giftNote: o.giftNote, promo: o.promo, lang: document.documentElement.lang === "ne" ? "ne" : "en"
         })
       }).then(function (r) { return r.json(); }).then(function (j) {
         if (!j || !j.ok) { var err = new Error("sheet"); err.code = (j && j.error) || "unknown"; throw err; }
+        return j;
       });
     }
 
@@ -216,7 +311,7 @@
       if (!validate()) { status.textContent = "Please check the highlighted details."; return; }
 
       var o = {
-        ref: makeRef(), items: b.text, total: b.total, cart: b.cart,
+        ref: makeRef(), items: b.text, total: b.total, cart: b.cart, subtotal: b.subtotal, discount: b.discount, promo: promo ? promo.code : "",
         name: clean(f.name.value, 60), phone: clean(f.phone.value, 20), address: clean(f.address.value, 200), email: clean(f.email.value, 80),
         instagram: clean(f.instagram.value, 40), notes: clean(f.notes.value, 200), bot: f.bot.checked,
         gift: f.gift && f.gift.checked ? "Yes" : "No", giftNote: f.gift && f.gift.checked ? clean(f.giftNote.value, 150) : ""
@@ -274,16 +369,25 @@
           return;
         }
         writeLog({ t: Date.now(), f: fingerprint(o) });
+        // The Sheet's own sums win: show the total and discount it actually saved.
+        var saved = sheetIdx !== -1 && res[sheetIdx].status === "fulfilled" ? res[sheetIdx].value : null;
+        if (saved && typeof saved.total === "number" && typeof saved.discount === "number") {
+          o.total = saved.total; o.discount = saved.discount;
+          if (o.promo && !saved.promo) o.promoRefused = true;
+        }
         showDone(o);
       });
     });
 
     function showDone(o) {
       document.querySelector(".sp-ref").textContent = o.ref;
-      document.querySelector(".sp-done-summary").textContent = o.items + "\nTotal: NPR " + o.total + (o.gift === "Yes" ? "\nGift: yes" + (o.giftNote ? " (note: " + o.giftNote + ")" : "") : "");
+      document.querySelector(".sp-done-summary").textContent = o.items + (o.discount ? "\nDiscount (" + o.promo + "): - NPR " + o.discount : "") + "\nTotal: NPR " + o.total + (o.promo && !o.discount ? "\nPromo code " + o.promo + (o.promoRefused ? ": sorry, it couldn't be used on this order" : ": we'll check it when we confirm") : "") + (o.gift === "Yes" ? "\nGift: yes" + (o.giftNote ? " (note: " + o.giftNote + ")" : "") : "");
       document.querySelector(".sp-done-phone").textContent = o.phone;
       document.querySelector(".sp-done-email-addr").textContent = o.email;
       document.querySelector(".sp-done-email").hidden = !o.email;
+      var track = document.querySelector(".sp-track");
+      if (track) track.href = "track.html?ref=" + encodeURIComponent(o.ref);
+      var re = document.querySelector(".sp-reorder"); if (re) re.hidden = true;
       document.querySelector(".sp-layout").hidden = true;
       document.querySelector(".sp-hero").hidden = true;
       var done = document.getElementById("sp-done");

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Track your order | Sova Loofah Soap</title>
+  <meta name="description" content="Check where your Sova soap order is: enter your order number and phone number.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#F7F2E7">
+  <meta name="color-scheme" content="light">
+  <!-- Security: only this site's own files load; this page may only talk to our Google Sheet. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-BGCoihfCnd8b1jaNZi6YpOGKaD6J6F6xIiSTYp5pUF8='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; connect-src https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <link rel="icon" href="assets/favicon-64.png" sizes="64x64" type="image/png">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <script>document.documentElement.classList.add("js");try{if(/[?&]lang=ne\b/.test(location.search)||(!/[?&]lang=en\b/.test(location.search)&&localStorage.getItem("sova-lang")==="ne"))document.documentElement.classList.add("i18n-pending")}catch(e){}</script>
+  <link rel="stylesheet" href="style.css?v=1e53858d">
+  <script src="script.js?v=045f5d17" defer></script>
+  <script src="i18n-ne.js?v=b8a8bfb3" defer></script>
+  <script src="i18n.js?v=e7167582" defer></script>
+  <script src="config.js?v=aebdfce5" defer></script>
+  <script src="track.js?v=844eeb11" defer></script>
+</head>
+<body class="shop-page track-page" id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main">
+      <a class="logo" href="index.html" aria-label="Sova home">
+        <img class="logo-img" src="assets/logo.png" width="52" height="52" alt="Sova logo">
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#product">The bar</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="index.html#story">Our story</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="track.html" aria-current="page">Track order</a></li>
+      </ul>
+      <a class="btn btn-small btn-ghost back-home" href="index.html"><span aria-hidden="true">←</span> Home</a>
+      <button class="lang-btn" type="button" data-no-i18n aria-label="नेपालीमा हेर्नुहोस् (View in Nepali)"><span class="lang-btn-text" lang="ne">नेपाली</span></button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="nav-toggle-bars" aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="sp-hero">
+      <div class="container">
+        <p class="eyebrow">Track order</p>
+        <h1>Where's my soap?</h1>
+        <p class="lead">Enter your order number and the phone number you ordered with. We'll show you where your order is.</p>
+      </div>
+    </section>
+
+    <noscript>
+      <div class="container"><p class="noscript-note">Order tracking needs JavaScript, which is switched off in your browser. To ask about your order, message us on Instagram <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">@sova.np9</a> or email <a href="mailto:sovasoap.np9@gmail.com">sovasoap.np9@gmail.com</a>.</p></div>
+    </noscript>
+
+    <div class="container tr-wrap">
+      <form class="tr-form sp-fields" id="track-form" novalidate>
+        <label>Order number
+          <input type="text" id="t-ref" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="SOVA-XXXXXX">
+          <span class="sp-err" id="e-ref"></span>
+        </label>
+        <label>Phone number
+          <input type="tel" id="t-phone" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="98XXXXXXXX">
+          <span class="sp-err" id="e-tphone"></span>
+        </label>
+        <button type="submit" class="btn btn-leaf btn-big tr-go sp-wide">Check my order</button>
+        <p class="tr-status sp-wide" role="status" aria-live="polite"></p>
+        <p class="tr-hint sp-wide">Your order number starts with SOVA- and is on your thank-you screen and in your order emails.</p>
+      </form>
+
+      <section class="tr-result" id="tr-result" hidden tabindex="-1" aria-labelledby="tr-title">
+        <h2 id="tr-title">Order <span class="tr-ref" data-no-i18n></span></h2>
+        <p class="tr-placed">Ordered on <span class="tr-date" data-no-i18n></span></p>
+        <ol class="tr-steps">
+          <li><span class="tr-dot" aria-hidden="true"></span><span class="tr-name">Received</span></li>
+          <li><span class="tr-dot" aria-hidden="true"></span><span class="tr-name">Confirmed</span></li>
+          <li><span class="tr-dot" aria-hidden="true"></span><span class="tr-name">On the way</span></li>
+          <li><span class="tr-dot" aria-hidden="true"></span><span class="tr-name">Delivered</span></li>
+        </ol>
+        <p class="tr-msg"></p>
+        <p class="tr-help">Questions about this order? <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">DM @sova.np9<span class="sr-only"> on Instagram (opens in a new tab)</span></a></p>
+        <div class="sp-done-ctas">
+          <a class="btn btn-ghost" href="shop.html">Order more soap</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="logo" href="index.html" aria-label="Sova home">
+          <img class="logo-img logo-footer" src="assets/logo.png" width="88" height="88" alt="Sova logo" loading="lazy">
+        </a>
+        <p class="footer-tag"><strong>Got your back, and your body.</strong><br>Loofah-infused soap, no harmful chemicals. Kind to skin, kind to the planet.</p>
+      </div>
+      <ul class="footer-links">
+        <li>
+          <a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
+            <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
+            @sova.np9<span class="sr-only"> on Instagram (opens in a new tab)</span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:sovasoap.np9@gmail.com">
+            <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            sovasoap.np9@gmail.com<span class="sr-only"> (send us an email)</span>
+          </a>
+        </li>
+        <li>
+          <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" fill="currentColor"/></svg>
+          Kathmandu, Nepal
+        </li>
+      </ul>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span data-year>2026</span> Sova · From Kathmandu, with love</p>
+      <a href="index.html">Back to home</a>
+    </div>
+  </footer>
+
+  <svg class="sprite" width="0" height="0" aria-hidden="true">
+    <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></symbol>
+  </svg>
+</body>
+</html>

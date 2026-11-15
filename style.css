@@ -154,16 +154,16 @@ p { margin: 0 0 1em; }
   font-family: var(--font-display); font-variation-settings: "SOFT" 100;
   font-weight: 700; font-size: 1.75rem; letter-spacing: -.02em; line-height: 1;
 }
-.nav-links { display: none; list-style: none; margin: 0; padding: 0; gap: 28px; }
-.nav-links a { text-decoration: none; font-weight: 700; color: var(--bark-deep); position: relative; padding: 6px 0; }
+.nav-links { display: none; list-style: none; margin: 0; padding: 0; gap: clamp(16px, 2vw, 28px); }
+.nav-links a { white-space: nowrap; text-decoration: none; font-weight: 700; color: var(--bark-deep); position: relative; padding: 6px 0; }
 .nav-links a::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px;
   background: var(--turmeric); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease);
 }
 .nav-links a:hover::after { transform: scaleX(1); }
-@media (min-width: 820px) { .nav-links { display: flex; } }
+@media (min-width: 1080px) { .nav-links { display: flex; } }
 
-/* Phone menu (below 820px): ☰ button opens the links as a panel under the header */
+/* Phone and tablet menu (below 1080px): ☰ button opens the links as a panel under the header */
 .nav-toggle {
   display: none; flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
   border: 2px solid var(--leaf-deep); background: transparent; color: var(--leaf-deep);
@@ -181,7 +181,7 @@ p { margin: 0 0 1em; }
 .is-menu-open .nav-toggle-bars { background: transparent; }
 .is-menu-open .nav-toggle-bars::before { transform: translateY(6px) rotate(45deg); }
 .is-menu-open .nav-toggle-bars::after { transform: translateY(-6px) rotate(-45deg); }
-@media (max-width: 819.98px) {
+@media (max-width: 1079.98px) {
   .nav { gap: 10px; }
   .nav .logo { margin-right: auto; }
   .is-menu-open .nav-links {
@@ -194,7 +194,7 @@ p { margin: 0 0 1em; }
   .is-menu-open .nav-links li:last-child a { border-bottom: 0; }
   .is-menu-open .nav-links a::after { display: none; }
 }
-@media (min-width: 820px) { .js .nav-toggle { display: none; } }
+@media (min-width: 1080px) { .js .nav-toggle { display: none; } }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; padding: 32px 0 96px; overflow: hidden; }
@@ -890,3 +890,69 @@ html.is-framed body { visibility: hidden; }
 .notfound h1 { font-size: clamp(1.9rem, 6vw, 3rem); max-width: 16ch; }
 .notfound .lead { margin-bottom: 18px; }
 .notfound-ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* ---------- Promo code (Shop summary) ---------- */
+.sp-layout > * { min-width: 0; }
+.promo { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--oat); }
+.promo label { display: block; font-weight: 700; font-size: .88rem; }
+.promo-row { display: flex; gap: 8px; margin-top: 6px; }
+.promo-row input {
+  flex: 1 1 0; width: 100%; min-width: 0; font: inherit; font-size: 1rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  padding: 9px 12px; border-radius: 12px; border: 2px solid var(--oat); background: var(--cream); color: var(--bark-deep);
+}
+.promo-row input:focus-visible { border-color: var(--leaf); outline: none; box-shadow: 0 0 0 4px var(--sage-soft); }
+.promo-row input[readonly] { background: var(--sage-soft); border-color: var(--sage); }
+.promo-btn { flex: none; }
+.promo-msg { min-height: 1.3em; margin: 6px 0 0; font-size: .85rem; font-weight: 700; color: var(--leaf-deep); }
+.basket-discount { display: flex; justify-content: space-between; gap: 10px; margin: 10px 0 -6px; font-size: .95rem; font-weight: 700; color: var(--leaf-deep); }
+.basket-discount strong { white-space: nowrap; }
+.sp-reorder { margin: 20px 0 0; padding: 12px 16px; border-radius: 16px; background: var(--sage-soft); color: var(--leaf-deep); font-weight: 700; text-align: center; }
+
+/* ---------- Track my order ---------- */
+.tr-wrap { max-width: 640px; padding-top: 24px; padding-bottom: 80px; display: grid; gap: 24px; }
+.tr-go { width: 100%; }
+.tr-status { min-height: 1.4em; margin: 0; font-weight: 700; color: #A0331F; font-size: .92rem; text-align: center; }
+.tr-hint { margin: 0; font-size: .85rem; color: var(--bark-soft); text-align: center; }
+.tr-result { background: var(--paper); border-radius: 28px; padding: 28px 22px; box-shadow: var(--shadow); text-align: center; outline: none; }
+.tr-result h2 { font-size: 1.5rem; margin-bottom: .2em; }
+.tr-placed { color: var(--bark-soft); font-size: .92rem; margin: 0 0 20px; }
+.tr-steps { list-style: none; margin: 0 0 20px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tr-steps li { position: relative; display: grid; justify-items: center; gap: 8px; font-size: .82rem; font-weight: 700; color: var(--bark-soft); padding: 0 2px; }
+.tr-steps li::before { content: ""; position: absolute; top: 13px; right: 50%; width: 100%; height: 4px; background: var(--oat); }
+.tr-steps li:first-child::before { display: none; }
+.tr-dot { position: relative; z-index: 1; width: 30px; height: 30px; border-radius: 50%; background: var(--oat); border: 4px solid var(--paper); box-sizing: border-box; display: grid; place-items: center; }
+.tr-steps .is-done, .tr-steps .is-current { color: var(--leaf-deep); }
+.tr-steps .is-done::before, .tr-steps .is-current::before { background: var(--leaf); }
+.tr-steps .is-done .tr-dot { background: var(--leaf); }
+.tr-steps .is-done .tr-dot::after { content: "✓"; color: var(--cream); font-size: .8rem; font-weight: 800; line-height: 1; }
+.tr-steps .is-current .tr-dot { background: var(--turmeric); box-shadow: 0 0 0 4px rgba(226, 165, 43, .28); }
+.is-cancelled .tr-steps { opacity: .4; }
+.tr-msg { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--leaf-deep); margin: 0 0 12px; }
+.is-cancelled .tr-msg { color: #A0331F; }
+.tr-help { font-size: .92rem; color: var(--bark-soft); margin: 0; }
+
+/* ---------- English / नेपाली ---------- */
+@font-face {
+  font-family: "Mukta"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/mukta-devanagari-400.woff2") format("woff2");
+  unicode-range: U+0900-097F, U+1CD0-1CF4, U+1CF7-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF, U+11B00-11B0A;
+}
+.lang-btn {
+  display: none; flex: none; align-items: center; height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  border: 2px solid var(--oat); background: var(--paper); color: var(--bark-deep); font-weight: 700; font-size: .9rem; line-height: 1;
+  font-family: "Noto Sans Devanagari", var(--font-body);
+  transition: border-color .2s, background-color .2s;
+}
+.js .lang-btn { display: inline-flex; }
+.fonts-late .lang-btn { font-family: "Nunito", "Mukta", "Noto Sans Devanagari", system-ui, sans-serif; }
+.lang-btn:hover { border-color: var(--leaf); background: var(--sage-soft); }
+/* The page stays hidden for a moment while Nepali text is put in, so English never flashes first. */
+html.i18n-pending body { visibility: hidden; animation: i18n-show 0s 2s forwards; }
+@keyframes i18n-show { to { visibility: visible; } }
+html[lang="ne"] {
+  --font-display: "Fraunces", "Mukta", "Noto Sans Devanagari", "Georgia", serif;
+  --font-body: "Nunito", "Mukta", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+html[lang="ne"] body { line-height: 1.75; }
+html[lang="ne"] h1, html[lang="ne"] h2, html[lang="ne"] h3 { line-height: 1.32; }
+html[lang="ne"] * { letter-spacing: 0 !important; font-style: normal !important; }
