@@ -764,16 +764,24 @@ p { margin: 0 0 1em; }
 /* ---------- Sticky order button ---------- */
 .sticky-order {
   position: fixed; z-index: 60; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
-  display: inline-flex; align-items: center; gap: .55em; white-space: nowrap;
-  min-height: 52px; padding: .8em 1.4em; border-radius: 999px;
-  background: var(--leaf-deep); color: var(--cream); font-weight: 800; text-decoration: none;
-  box-shadow: 0 14px 30px -10px rgba(47, 81, 48, .7), 0 0 0 4px rgba(247, 242, 231, .9);
-  transform: translate(-50%, 140%); opacity: 0; pointer-events: none;
-  transition: transform .45s var(--ease), opacity .3s;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; padding: 6px; border-radius: 999px;
+  background: var(--paper); box-shadow: 0 14px 30px -10px rgba(47, 81, 48, .7), 0 0 0 1px rgba(59, 42, 30, .08);
+  transform: translate(-50%, 140%); opacity: 0; visibility: hidden; pointer-events: none;
+  transition: transform .45s var(--ease), opacity .3s, visibility 0s .45s;
 }
-.sticky-order.is-shown { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
-.sticky-order:hover { background: #24412A; }
-.sticky-order:focus-visible { outline-color: var(--turmeric); }
+.sticky-order.is-shown { transform: translate(-50%, 0); opacity: 1; visibility: visible; pointer-events: auto; transition: transform .45s var(--ease), opacity .3s; }
+.sticky-shop {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.5em; border-radius: 999px;
+  background: var(--leaf-deep); color: var(--cream); font-weight: 800; text-decoration: none;
+}
+.sticky-shop:hover { background: #24412A; }
+.sticky-ig {
+  display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+  border: 2px solid var(--leaf-deep); color: var(--leaf-deep); background: transparent;
+}
+.sticky-ig:hover { background: var(--sage-soft); }
+.sticky-ig .ig-icon { width: 22px; height: 22px; }
+.sticky-shop:focus-visible, .sticky-ig:focus-visible { outline-color: var(--turmeric); }
 @media (min-width: 720px) {
   .sticky-order { left: auto; right: 24px; bottom: 24px; transform: translateY(140%); }
   .sticky-order.is-shown { transform: none; }
@@ -956,3 +964,47 @@ html[lang="ne"] {
 html[lang="ne"] body { line-height: 1.75; }
 html[lang="ne"] h1, html[lang="ne"] h2, html[lang="ne"] h3 { line-height: 1.32; }
 html[lang="ne"] * { letter-spacing: 0 !important; font-style: normal !important; }
+
+/* ---------- Phone polish ---------- */
+/* Small phones: the header keeps logo, language and menu; the Order / Home button moves into the menu. */
+@media (max-width: 599.98px) { .js .nav > .btn { display: none; } }
+@media (min-width: 600px) { .nav-ig { display: none; } }
+@media (max-width: 599.98px) { html:not(.js) .nav-ig { display: none; } }
+
+/* Benefit and eco cards become compact rows on phones (icon left, text right) */
+@media (max-width: 719.98px) {
+  .benefits, .eco-grid { gap: 12px; }
+  .benefit, .eco-item { display: grid; grid-template-columns: 56px 1fr; column-gap: 14px; align-items: center; text-align: left; padding: 16px 18px; }
+  .benefit-icon, .eco-icon { grid-row: 1 / span 2; width: 56px; height: 56px; margin: 0; }
+  .eco-icon svg { width: 42px; height: 42px; }
+  .benefit h3, .eco-item h3 { margin: 0 0 2px; font-size: 1.15rem; align-self: end; }
+  .benefit p, .eco-item p { font-size: .95rem; line-height: 1.5; align-self: start; }
+
+  /* Coming-soon cards: swipe sideways instead of a tall stack */
+  .soon-grid {
+    grid-auto-flow: column; grid-auto-columns: 78%; gap: 14px; overflow-x: auto;
+    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 12px; scroll-padding-inline: var(--gutter);
+  }
+  .soon-grid::-webkit-scrollbar { display: none; }
+  .soon-grid > li { scroll-snap-align: start; }
+}
+
+/* Shop: basket bar pinned to the bottom on phones and tablets */
+.sp-bar {
+  position: fixed; z-index: 60; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 8px 8px 18px; border-radius: 999px; background: var(--paper);
+  box-shadow: 0 14px 30px -10px rgba(47, 81, 48, .7), 0 0 0 1px rgba(59, 42, 30, .08);
+}
+.sp-bar-text { margin: 0; display: flex; flex-wrap: wrap; column-gap: 8px; font-size: .95rem; line-height: 1.25; }
+.sp-bar-total { font-family: var(--font-display); font-weight: 700; color: var(--leaf-deep); }
+.sp-bar-go { flex: none; min-height: 46px; padding: 0 1.3em; }
+@media (min-width: 960px) { .sp-bar { display: none !important; } }
+
+/* A little bounce when a soap is added */
+@keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.22); } 100% { transform: scale(1); } }
+.qty-val.is-bump, .basket-total strong.is-bump { display: inline-block; animation: bump .35s var(--ease); }
+.sp-bar.is-bump { animation: bump-bar .35s var(--ease); }
+@keyframes bump-bar { 0% { transform: translateY(0); } 40% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .is-bump { animation: none !important; } }

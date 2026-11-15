@@ -34,10 +34,10 @@
 
   <link rel="preload" as="image" href="assets/hero-soap.jpg" fetchpriority="high">
   <script>document.documentElement.classList.add("js");try{if(/[?&]lang=ne\b/.test(location.search)||(!/[?&]lang=en\b/.test(location.search)&&localStorage.getItem("sova-lang")==="ne"))document.documentElement.classList.add("i18n-pending")}catch(e){}</script>
-  <link rel="stylesheet" href="style.css?v=1e53858d">
+  <link rel="stylesheet" href="style.css?v=b4136490">
   <script src="config.js?v=aebdfce5" defer></script>
   <script src="script.js?v=045f5d17" defer></script>
-  <script src="i18n-ne.js?v=b8a8bfb3" defer></script>
+  <script src="i18n-ne.js?v=f8f5d102" defer></script>
   <script src="i18n.js?v=e7167582" defer></script>
   <script src="notify.js?v=d9166cc1" defer></script>
 </head>
@@ -58,6 +58,7 @@
         <li><a href="#order">How to order</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="track.html">Track order</a></li>
+        <li class="nav-ig"><a href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">Order on Instagram<span class="sr-only"> (opens in a new tab)</span></a></li>
       </ul>
       <a class="btn btn-small btn-leaf" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
         <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
@@ -577,10 +578,12 @@
     </section>
 
     <!-- Floating order button -->
-    <a class="sticky-order" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer">
-      <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
-      Order on Instagram<span class="sr-only"> (opens in a new tab)</span>
-    </a>
+    <div class="sticky-order">
+      <a class="sticky-shop" href="shop.html">Shop now</a>
+      <a class="sticky-ig" href="https://www.instagram.com/sova.np9" target="_blank" rel="noopener noreferrer" aria-label="Order on Instagram (opens in a new tab)">
+        <svg class="ig-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>
+      </a>
+    </div>
   </main>
 
   <!-- ============ 8. FOOTER ============ -->

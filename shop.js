@@ -138,15 +138,51 @@
         packEl.querySelector('[data-mix="1"]').disabled = packRose >= size;
       }
       place.disabled = sending || !b.list.length;
+      if (bar) {
+        var count = 0; items.forEach(function (it) { count += qty[it.dataset.id]; });
+        bar.querySelector(".sp-bar-count").textContent = count;
+        bar.querySelector(".sp-bar-unit").textContent = count === 1 ? "item" : "items";
+        bar.querySelector(".sp-bar-total").textContent = "NPR " + b.total;
+        syncBar();
+      }
+    }
+
+    /* Phone basket bar: shows while there is something in the basket and the summary is off screen */
+    var bar = document.querySelector(".sp-bar");
+    var summaryEl = document.querySelector(".sp-summary");
+    var summarySeen = false, typing = false;
+    function syncBar() {
+      if (!bar) return;
+      var has = false; items.forEach(function (it) { if (qty[it.dataset.id] > 0) has = true; });
+      bar.hidden = !(has && !summarySeen && !typing && !document.querySelector(".sp-layout").hidden);
+    }
+    function bump(el) {
+      if (!el) return;
+      el.classList.remove("is-bump"); void el.offsetWidth; el.classList.add("is-bump");
+    }
+    if (bar) {
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (en) { summarySeen = en[0].isIntersecting; syncBar(); }, { threshold: 0.15 }).observe(summaryEl);
+      } else { summarySeen = true; }
+      form.addEventListener("focusin", function (e) { typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName) && e.target.type !== "checkbox"; syncBar(); });
+      form.addEventListener("focusout", function () { typing = false; syncBar(); });
+      bar.querySelector(".sp-bar-go").addEventListener("click", function () {
+        var filled = clean(f.name.value, 60).length >= 2 && clean(f.phone.value, 20).length >= 7 && clean(f.address.value, 200).length >= 5;
+        var target = filled ? summaryEl : document.getElementById("sp-details");
+        target.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+        if (!filled) f.name.focus({ preventScroll: true });
+      });
     }
 
     items.forEach(function (it) {
       it.querySelectorAll(".qty-btn[data-step]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var id = it.dataset.id;
+          var before = qty[id];
           qty[id] = Math.max(0, Math.min(CONFIG.maxPerItem, qty[id] + Number(btn.dataset.step)));
           status.textContent = "";
           render();
+          if (qty[id] > before) { bump(it.querySelector(".qty-val")); bump(document.querySelector(".basket-total strong")); bump(bar); }
         });
       });
     });
@@ -389,6 +425,7 @@
       if (track) track.href = "track.html?ref=" + encodeURIComponent(o.ref);
       var re = document.querySelector(".sp-reorder"); if (re) re.hidden = true;
       document.querySelector(".sp-layout").hidden = true;
+      syncBar();
       document.querySelector(".sp-hero").hidden = true;
       var done = document.getElementById("sp-done");
       done.hidden = false;

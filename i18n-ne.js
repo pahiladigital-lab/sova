@@ -36,6 +36,7 @@ window.SOVA_NE = {
   "in one little bar.": "एउटै सानो बारमा।",
   "Sova is soap with real loofah built right in, and no harmful chemicals. Lather up, give your skin a gentle scrub, rinse. That's it.": "Sova भित्रै असली लुफा भएको साबुन हो, जसमा हानिकारक रसायन छैन। फिँज निकाल्नुहोस्, छालालाई हल्का स्क्रब गर्नुहोस्, पखाल्नुहोस्। बस्, यत्ति हो।",
   "Order on Instagram": "Instagram मा अर्डर गर्नुहोस्",
+  "Order on Instagram (opens in a new tab)": "Instagram मा अर्डर गर्नुहोस् (नयाँ ट्याबमा खुल्छ)",
   "Shop now": "अहिले किन्नुहोस्",
   "Shop online or DM": "अनलाइन किन्नुहोस्, वा अर्डर गर्न",
   "to order": "मा DM गर्नुहोस्",
@@ -253,6 +254,9 @@ window.SOVA_NE = {
   "soon to confirm payment and delivery. Once confirmed, we'll share our WhatsApp number.": "(अर्डर पक्का भएपछि हामी हाम्रो WhatsApp नम्बर दिन्छौं।)",
   "We'll also email updates to": "हामी जानकारी इमेलमा पनि पठाउँछौं:",
   "Track this order": "यो अर्डर ट्र्याक गर्नुहोस्",
+  "item": "वटा",
+  "items": "वटा",
+  "Checkout": "अगाडि बढ्नुहोस्",
 
   /* Shop: messages */
   "Add at least one soap first.": "पहिले कम्तीमा एउटा साबुन थप्नुहोस्।",
