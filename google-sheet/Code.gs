@@ -149,8 +149,19 @@ function validRef_(v) {
   return typeof v === 'string' && /^SOVA-[A-Z0-9]{6,8}$/.test(v);
 }
 
+// New order number in the same style as the website's (no look-alike letters such as 0/O or 1/I)
 function newRef_() {
-  return 'SOVA-' + Utilities.getUuid().replace(/-/g, '').slice(0, 6).toUpperCase();
+  const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', hex = Utilities.getUuid().replace(/-/g, '');
+  let s = '';
+  for (let i = 0; i < 6; i++) s += A.charAt(parseInt(hex.substr(i * 2, 2), 16) % A.length);
+  return 'SOVA-' + s;
+}
+
+// True if this order number is already in the Orders tab
+function refTaken_(sh, ref) {
+  if (sh.getLastRow() < 2) return false;
+  const col = ORDER_HEADERS.indexOf('Order ref') + 1;
+  return sh.getRange(2, col, sh.getLastRow() - 1, 1).getValues().some(function (r) { return String(r[0]).trim().toUpperCase() === ref; });
 }
 
 // Last 10 digits of a phone number, so +977 98… and 98… count as the same phone
@@ -334,10 +345,15 @@ function doPost(e) {
     if (!underCap('oh')) { console.log('Rejected: hourly limit'); return out_({ ok: false, error: 'busy' }); }
     cache.put(phoneKey, '1', 120);
 
-    const ref = validRef_(d.ref) ? d.ref : newRef_();
+    // Every order number is unique. If the website's number is already used (or missing), a new one is made here,
+    // and the website shows that one, so nobody can add a fake order under someone else's number.
+    const sh = sheet_(ORDERS, ORDER_HEADERS);
+    let ref = validRef_(d.ref) ? d.ref : newRef_();
+    if (refTaken_(sh, ref)) console.log('Order number ' + ref + ' already used: making a new one');
+    for (let i = 0; i < 20 && refTaken_(sh, ref); i++) ref = newRef_();
+    if (refTaken_(sh, ref)) { console.log('Rejected: could not make a unique order number'); return out_({ ok: false, error: 'server' }); }
     const email = validEmail_(d.email) ? safe_(d.email, 80) : '';
     const gift = d.gift === 'Yes' ? 'Yes' : 'No';
-    const sh = sheet_(ORDERS, ORDER_HEADERS);
     sh.appendRow([
       now, ref, lines.join(' ; '), 'NPR ' + total, name, phone, address, text_(d.instagram, 40),
       note, gift, gift === 'Yes' ? text_(d.giftNote, 150) : '', 'New', email, '',

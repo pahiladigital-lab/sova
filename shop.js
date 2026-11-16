@@ -379,11 +379,7 @@
       }
       confirmDuplicate = false;
 
-      var jobs = [], names = [];
-      if (CONFIG.web3formsKey) { jobs.push(viaWeb3Forms(o)); names.push("email"); }
-      if (CONFIG.sheetUrl) { jobs.push(viaSheet(o)); names.push("sheet"); }
-      if (!jobs.length && DEMO) { jobs.push(new Promise(function (ok) { setTimeout(ok, 700); })); names.push("demo"); }
-      if (!jobs.length) {
+      if (!CONFIG.web3formsKey && !CONFIG.sheetUrl && !DEMO) {
         status.textContent = "Online ordering isn't switched on yet. Please DM us on Instagram @sova.np9 to order.";
         return;
       }
@@ -392,11 +388,24 @@
       place.textContent = "Sending your order…";
       status.textContent = "";
 
-      Promise.allSettled(jobs).then(function (res) {
+      // The Sheet goes first: it makes sure the order number is unique and may hand back a new one.
+      // The email to Sova is sent after that, so both always carry the same order number.
+      function settle(p) {
+        return p ? p.then(function (v) { return { status: "fulfilled", value: v }; }, function (e) { return { status: "rejected", reason: e }; }) : Promise.resolve(null);
+      }
+      var names = ["email", "sheet"];
+      var run = (!CONFIG.web3formsKey && !CONFIG.sheetUrl)
+        ? new Promise(function (ok) { setTimeout(function () { ok([{ status: "fulfilled" }, null]); }, 700); })
+        : settle(CONFIG.sheetUrl ? viaSheet(o) : null).then(function (sr) {
+            if (sr && sr.status === "fulfilled" && sr.value && /^SOVA-[A-Z0-9]{6,8}$/.test(String(sr.value.ref))) o.ref = String(sr.value.ref);
+            return settle(CONFIG.web3formsKey ? viaWeb3Forms(o) : null).then(function (er) { return [er, sr]; });
+          });
+
+      run.then(function (res) {
         // "Thank you" only when a channel confirmed it received the order.
-        var anyOk = res.some(function (r) { return r.status === "fulfilled"; });
+        var anyOk = res.some(function (r) { return r && r.status === "fulfilled"; });
         var sheetIdx = names.indexOf("sheet");
-        var sheetCode = sheetIdx !== -1 && res[sheetIdx].status === "rejected" && res[sheetIdx].reason ? res[sheetIdx].reason.code : "";
+        var sheetCode = res[sheetIdx] && res[sheetIdx].status === "rejected" && res[sheetIdx].reason ? res[sheetIdx].reason.code : "";
         sending = false; place.textContent = "Place order"; render();
         if (!anyOk) {
           status.textContent = sheetCode === "too_soon"
@@ -406,7 +415,7 @@
         }
         writeLog({ t: Date.now(), f: fingerprint(o) });
         // The Sheet's own sums win: show the total and discount it actually saved.
-        var saved = sheetIdx !== -1 && res[sheetIdx].status === "fulfilled" ? res[sheetIdx].value : null;
+        var saved = res[sheetIdx] && res[sheetIdx].status === "fulfilled" ? res[sheetIdx].value : null;
         if (saved && typeof saved.total === "number" && typeof saved.discount === "number") {
           o.total = saved.total; o.discount = saved.discount;
           if (o.promo && !saved.promo) o.promoRefused = true;
